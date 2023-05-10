@@ -1,0 +1,906 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Aula 3 - Sistemas em Tempo Discreto &#8212; Notas de Aula - Processamento Digital de Sinais</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Aula 03 - Sistemas em tempos discreto';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Aula 4 - Transformada de Fourier em Tempo Discreto" href="Aula%2004%20-%20Transformada%20de%20Fourier%20em%20Tempo%20Discreto.html" />
+    <link rel="prev" title="Aula 2 - Sinais em Tempo Discreto" href="Aula%2002%20-%20Sinais%20em%20Tempo%20Discreto.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo_lps.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo_lps.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Notas de Aula - Processamento Digital de Sinais
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Aula%2001%20-%20Introdu%C3%A7%C3%A3o.html">Aula 1 - Introdução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2002%20-%20Sinais%20em%20Tempo%20Discreto.html">Aula 2 - Sinais em Tempo Discreto</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Aula 3 - Sistemas em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2004%20-%20Transformada%20de%20Fourier%20em%20Tempo%20Discreto.html">Aula 4 - Transformada de Fourier em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2005%20-%20Amostragem.html">Aula 5 - Amostragem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2006%20-%20Transformada%20Z.html">Aula 6 - Transformada Z</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2007%20-%20Transformada%20Discreta%20de%20Fourier.html">Aula 7 - Transformada Discreta de Fourier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2008%20-%20Filtros%20IIR.html">Aula 8 - Filtros IIR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2009%20-%20Filtros%20FIR%20-%20Parte%201.html">Aula 9 - Filtros FIR - Parte 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2010%20-%20Filtros%20FIR%20-%20Parte%202.html">Aula 10 - Filtros FIR - Parte 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2011%20-%20Filtros%20FIR%20-%20Parte%203.html">Aula 11 - Filtros FIR - Parte 3</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FAula 03 - Sistemas em tempos discreto.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Aula 03 - Sistemas em tempos discreto.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Aula 3 - Sistemas em Tempo Discreto</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introducao">1. Introdução</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-lineares-discretos-no-tempo">2. Sistemas Lineares Discretos no Tempo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-invariante-ao-deslocamento">3. Sistemas Invariante ao Deslocamento</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-causais">4. Sistemas Causais</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-estaveis">5. Sistemas Estáveis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#representacao-em-diagrama-de-blocos">6. Representação em Diagrama de Blocos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-lineares-discretos-e-invariantes-ao-deslocamento-tempo">7. Sistemas Lineares Discretos e Invariantes ao Deslocamento (tempo)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determinacao-da-resposta-do-sistema">7.1. Determinação da Resposta do Sistema</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-soma-de-convolucao">7.2. A Soma de Convolução</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#propriedades-da-convolucao-e-interconexao-de-sistemas-sldi">7.3 Propriedades da Convolução e Interconexão de Sistemas SLDI</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalidade-e-estabilidade-em-sistemas-sldi">8. Causalidade e Estabilidade em sistemas SLDI</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observacoes">9. Observações</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equacao-linear-de-diferencas">10. Equação Linear de Diferenças</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equacao-linear-de-diferencas-com-coeficientes-constantes">Equação linear de diferenças com coeficientes constantes.</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="aula-3-sistemas-em-tempo-discreto">
+<h1>Aula 3 - Sistemas em Tempo Discreto<a class="headerlink" href="#aula-3-sistemas-em-tempo-discreto" title="Permalink to this heading">#</a></h1>
+<p>Versão 2023</p>
+<p>Essas notas de aula podem ser compartilhadas nos termos da lincença Creative Commons CC BY-NC-ND 4.0, com propósitos exclusivamente educacionais.</p>
+<p>Attribution-NonCommercial-NoDerivatives 4.0 International</p>
+<hr class="docutils" />
+<section id="introducao">
+<h2>1. Introdução<a class="headerlink" href="#introducao" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Sistema Discreto no tempo: é um operador matemático ou uma transformação <span class="math notranslate nohighlight">\(T\{ . \}\)</span> que se opera em um sinal (entrada), transformando-o em outro sinal (saída).</p></li>
+<li><p>Sinal de Entrada: Excitação ou <span class="math notranslate nohighlight">\(x[n]\)</span>.</p></li>
+<li><p>Sinal de Resposta ou Saída ou resposta do sistema:  <span class="math notranslate nohighlight">\(y[n]\)</span>.</p></li>
+</ul>
+<p><font size="6"><span class="math notranslate nohighlight">\( y[n] = T\{x[n]\}\)</span></font></p>
+<p><strong>Modelo Black Box (ou caixa preta)</strong></p>
+<p><font size="5"><span class="math notranslate nohighlight">\(x[n] \to \fbox{T\{\}} \to y[n] \)</span></font></p>
+<p><font size="4"><strong>Exemplo 1 - Sistema de atraso</strong></font></p>
+<p><font size="4"><strong><span class="math notranslate nohighlight">\(y[n]=x[n-n_d]\)</span></strong></font></p>
+<p><font size="3">Atrasa o sinal de entrada de <span class="math notranslate nohighlight">\(n_d\)</span> amostras (<span class="math notranslate nohighlight">\(n_d &gt; 0\)</span>). Caso <span class="math notranslate nohighlight">\(n_d &lt; 0\)</span> tem-se um avanço no sinal.</font></p>
+<p><font size="4"><strong>Exemplo 2 - Cálculo da Média</strong></font></p>
+<p><font size="4"><span class="math notranslate nohighlight">\( y[n] = \frac{1}{M_1+M_2+1} \sum_{k=-M_1}^{M_2}x[n-k] \)</span></font></p>
+<p><font size="4"> <strong>Exemplo 3 - Sistema sem Memória</strong> </font></p>
+<p><strong>Definição:</strong> A saída depende somente da entrada no instante atual.</p>
+<p><font size="4"><span class="math notranslate nohighlight">\(y[n] = x[n]^2\)</span></font></p>
+<p><font size="4"> <strong>Exemplo 4 - Acumulador</strong> </font></p>
+<p><font size="4"><span class="math notranslate nohighlight">\(y[n] = \sum_{k=-\infty}^{n}x[k]\)</span></font></p>
+<p><font size="4">Desenvolvendo a equação acima:</font></p>
+<div class="math notranslate nohighlight">
+\[ y[n] = \sum_{k=-\infty}^{n-1}x[k]+x[n] \; \Rightarrow \; y[n] = y[n-1] + x[n]\]</div>
+<ul class="simple">
+<li><p>A equação acima justifica o termo “acumulador”, pois a saída depende do valor presente da entrada <span class="math notranslate nohighlight">\(x[n]\)</span> e do valor anterior da saída <span class="math notranslate nohighlight">\(y[n-1]\)</span>.</p></li>
+<li><p>Observe também que a resposta depende das condições iniciais do sistema.</p></li>
+</ul>
+<p><font size="4"> <strong>Exemplo 5</strong> </font></p>
+<ul class="simple">
+<li><p>Considere que a sequência <span class="math notranslate nohighlight">\( x[n] = nu[n] \)</span> é aplicada em um acumulador:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>caso: <span class="math notranslate nohighlight">\(y[-1] = 0\)</span></p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ y[n] = \sum_{k=-\infty}^{n}ku[k] = \sum_{k=0}^{n}k = \frac{n(n+1)}{2} \]</div>
+<ol class="arabic simple" start="2">
+<li><p>caso: <span class="math notranslate nohighlight">\(y[-1] = 1\)</span></p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ y[n] = \sum_{k=-\infty}^{n}ku[k] = y[-1] + \sum_{k=0}^{n}k = \frac{n(n+1)+2}{2} \]</div>
+<ul class="simple">
+<li><p>A saída depende de <span class="math notranslate nohighlight">\(y[-1]\)</span> (condições iniciais).</p></li>
+<li><p>Se as condições iniciais são nulas o sistema é dito estar em repouso.</p></li>
+</ul>
+</section>
+<section id="sistemas-lineares-discretos-no-tempo">
+<h2>2. Sistemas Lineares Discretos no Tempo<a class="headerlink" href="#sistemas-lineares-discretos-no-tempo" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Seja: <span class="math notranslate nohighlight">\(y_1[n], \dots, y_M[n]\)</span> as saídas do sistema correspondentes às entradas <span class="math notranslate nohighlight">\(x_1[n], \dots, x_M[n]\)</span>. Então, para um sistema linear discreto no tempo tem-se que:</p></li>
+</ul>
+<p><font size="4"><span class="math notranslate nohighlight">\(\begin{split} T\{a_1x_1[n]+\cdots+a_Mx_M[n]\} = &amp;a_1T\{x_1[n]\} + &amp;\cdots+a_MT\{x_M[n]\} \\
+ = &amp;a_1y_1[n] +\cdots+a_My_M[n] \end{split}\)</span></font></p>
+<p>Em que: <span class="math notranslate nohighlight">\(M\)</span> é um número inteiro e <span class="math notranslate nohighlight">\(a_1, \dots, a_M\)</span> são constantes.</p>
+<p><font size="4"><strong>Exemplo 6</strong></font></p>
+<p><font size="4"><strong>O sistema <span class="math notranslate nohighlight">\( y[n] = nx[n] \)</span> é linear</strong></font></p>
+<p>Justificativa:</p>
+<p><span class="math notranslate nohighlight">\(y[n] = T[a_1x_1[n] +a_2x_2[n]] = n[a_1x_1[n] + a_2x_2[n]] = na_1x_1[n] + na_2x_2[n] = a_1y_1[n] + a_2y_2[n]\)</span></p>
+<hr class="docutils" />
+<p><font size="4"><strong>Exemplo 7</strong></font></p>
+<p><font size="4"><strong>O acumulador é um sistema linear”</strong></font></p>
+<p><font size="4"><span class="math notranslate nohighlight">\( y[n] = \sum_{k=-\infty}^{n}x[k] \)</span></font></p>
+<p>Justificativa:</p>
+<p><font size="4"><span class="math notranslate nohighlight">\( y[n] = \sum_{k=-\infty}^{n}[a_1x_1[k]+a_2x_2[k]] = \sum_{k=-\infty}^{n}a_1x_1[k] + \sum_{k=-\infty}^{n}a_2x_2[k] \)</span></font></p>
+<p><font size="4">$<span class="math notranslate nohighlight">\( = a_1y_1[n] + a_2y_2[n] \)</span>$</font></p>
+<hr class="docutils" />
+<p><font size="4"><strong>Exemplo 8</strong></font></p>
+<p><font size="4">O sistema abaixo é não-linear</font></p>
+<p><font size="4"><span class="math notranslate nohighlight">\( y[n] = x^2[n] \)</span></font></p>
+<p>Justificativa:</p>
+<p><font size="4"><span class="math notranslate nohighlight">\( y[n] = [a_1x_1[n] + a_2x_2[n]]^2 \neq a_1y_1[n] + a_2y_2[n] \)</span></font></p>
+<hr class="docutils" />
+</section>
+<hr class="docutils" />
+<section id="sistemas-invariante-ao-deslocamento">
+<h2>3. Sistemas Invariante ao Deslocamento<a class="headerlink" href="#sistemas-invariante-ao-deslocamento" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Um sistema é invariante ao deslocamento se:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[y[n] = T\{x[n]\} \; \Rightarrow \; T\{x[n-n_d]\} = y[n-n_d] \]</div>
+<ul class="simple">
+<li><p>Em que o deslocamento <span class="math notranslate nohighlight">\(n_d\)</span> é um número inteiro.</p></li>
+</ul>
+<p><font size="4"><strong>Exemplo 9</strong></font></p>
+<p><font size="4">”O Diferenciador é um sistema invariante ao deslocamento”</font></p>
+<div class="math notranslate nohighlight">
+\[ y[n] = x[n] - x[n-1] \]</div>
+<p><strong>Justificativa:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split} y[n,n_d] = T[x[n-n_d]] = x[n-n_d] - x[n-n_d-1]\\ = y[n-n_d] \end{split}\]</div>
+<p><font size="4"><strong>Exemplo 10</strong></font></p>
+<p><font size="4">O Sistema Decimador é variante ao deslocamento a não ser que M = 1</font></p>
+<div class="math notranslate nohighlight">
+\[ y[n] = x[Mn] \]</div>
+<div class="math notranslate nohighlight">
+\[ \mbox{Justificativa: Seja: } x_1[n] = x[n-n_d]\]</div>
+<div class="math notranslate nohighlight">
+\[ \mbox{Assim:} y[n] = x_1[Mn] = x[M(n-n_d)] = x[Mn-Mn_d] \neq y[n-n_d] \]</div>
+<p><font size="4"><strong>Outros exemplos de sistemas variantes ao deslocamento:</strong></p>
+<p><font size="4"><strong>Exemplo 11</strong></font></p>
+<div class="math notranslate nohighlight">
+\[ y[n] = nx[n] \]</div>
+<p>Justificativa:
+<span class="math notranslate nohighlight">\(y[n,n_d] = nx[n-n_d] \neq y[n-n_d]\)</span></p>
+<p><font size="4"><strong>Exemplo 12</strong></font></p>
+<div class="math notranslate nohighlight">
+\[ y[n] = x[-n] \]</div>
+<p>Justificativa:</p>
+<p>Seja: <span class="math notranslate nohighlight">\(x_1[n] = x[n-n_d]\)</span></p>
+<p>Assim: <span class="math notranslate nohighlight">\(y[n] = x_1[-n] = x[-n-n_d] \neq y[n-n_d] \)</span></p>
+</section>
+<section id="sistemas-causais">
+<h2>4. Sistemas Causais<a class="headerlink" href="#sistemas-causais" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Definição: A saída em qualquer instante <span class="math notranslate nohighlight">\(n\)</span> depende somente dos valores presente e passados da entrada <span class="math notranslate nohighlight">\(\{x[n], x[n-1], \dots x[n-M]\}\)</span>, mas não dos valores futuros <span class="math notranslate nohighlight">\(\{x[n+1], \dots \}\)</span>.</p></li>
+<li><p>A saída no instante <span class="math notranslate nohighlight">\(n = n_0\)</span> depende somente dos valores da entrada para <span class="math notranslate nohighlight">\(n \leq n_0\)</span>.</p></li>
+</ul>
+<p><font size="4"><strong>Exemplos de Sistemas causais</strong></font><font size="4"></p>
+<p><font size="4">1. <span class="math notranslate nohighlight">\( y[n] = x[n] - x[n-1]\)</span></font></p>
+<p><font size="4">2. <span class="math notranslate nohighlight">\( y[n]= \sum_{k=-\infty}^{n}x[k]\)</span></font></p>
+<p><font size="4">3. <span class="math notranslate nohighlight">\( y[n] = ax[n]\)</span></font></p>
+<p><font size="4"><strong>Exemplos de Sistemas não causais</strong></font></p>
+<p><font size="4">1. <span class="math notranslate nohighlight">\( y[n] = x[n] + x[n+1] \)</span></font></p>
+<p><font size="4">2. <span class="math notranslate nohighlight">\( y[n] = x[n^2] \)</span></font></p>
+<p><font size="4">3. <span class="math notranslate nohighlight">\( y[n] = x[2n] \)</span></font></p>
+<hr class="docutils" />
+</section>
+<hr class="docutils" />
+<section id="sistemas-estaveis">
+<h2>5. Sistemas Estáveis<a class="headerlink" href="#sistemas-estaveis" title="Permalink to this heading">#</a></h2>
+<p><font size="4">Um sistema em repouso é chamado de estável se e somente se para uma sequência de entrada limitada tem-se uma saída limitada.</font></p>
+<p><font size="4">$<span class="math notranslate nohighlight">\( |x(n)| \leq B_x &lt; \infty \; \Rightarrow \; |y(n)| \leq B_y &lt; \infty \)</span>$</font></p>
+<p><font size="4"><strong>Exemplo de Sistemas Estáveis</strong></font></p>
+<p><font size="4">1. <span class="math notranslate nohighlight">\( y[n] = x[n-n_d] \)</span></font></p>
+<p><font size="4">2. <span class="math notranslate nohighlight">\( y[n] = x[n]^2 \)</span></font></p>
+<p><font size="4">3. <span class="math notranslate nohighlight">\( y[n] = x[Mn] \)</span></font></p>
+<p><font size="4"><strong>Exemplo de Sistemas Instáveis</strong></font></p>
+<ul class="simple">
+<li><p>O acumulador é um sistema instável</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ y[n] = \sum_{k=-\infty}^{n} x[k] \]</div>
+<ul class="simple">
+<li><p>Seja x[n] = u[n] que é limitada pois <span class="math notranslate nohighlight">\(|u[n]| = 1\)</span>, <span class="math notranslate nohighlight">\(\forall n&gt;0\)</span>. Então:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split} y[n] = \sum_{k=-\infty}^{n} u[k] = \begin{cases} 0, &amp; n &lt; 0 \\ n+1, &amp; n \geq 0 \end{cases} \end{split}\]</div>
+<ul class="simple">
+<li><p>Embora <span class="math notranslate nohighlight">\(n\)</span> seja finito não existe um valor fixo para <span class="math notranslate nohighlight">\(B_y\)</span> tal que <span class="math notranslate nohighlight">\((n+1)\leq B_y &lt; \infty\)</span></p></li>
+</ul>
+</section>
+<section id="representacao-em-diagrama-de-blocos">
+<h2>6. Representação em Diagrama de Blocos<a class="headerlink" href="#representacao-em-diagrama-de-blocos" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Bloco somador:</p></li>
+</ul>
+<p><img alt="somador" src="_images/Aula_3_Slide_13_2.png" /></p>
+<ul class="simple">
+<li><p>Bloco de atraso:</p></li>
+</ul>
+<p><img alt="atraso" src="_images/Aula_3_Slide_13_3.png" /></p>
+<p><font size="4">Exemplo 13: Represente em diagrama de blocos o seguinte sistema:</font></p>
+<div class="math notranslate nohighlight">
+\[ y[n] - y[n-1] = 0.5x[n] + 0.5x[n-1] \]</div>
+<p>Rearranjando a equação tem-se:</p>
+<div class="math notranslate nohighlight">
+\[ y[n] = y[n-1] + 0.5[x[n]+x[n-1]] \]</div>
+<p><font size="4">E portanto tem-se o seguinte diagrama de blocos:</font></p>
+<p><img alt="diagrama_blocos" src="_images/Aula_3_Slide_14.png" /></p>
+<center>Observe que foi economizado um bloco multiplicador.</center></section>
+<section id="sistemas-lineares-discretos-e-invariantes-ao-deslocamento-tempo">
+<h2>7. Sistemas Lineares Discretos e Invariantes ao Deslocamento (tempo)<a class="headerlink" href="#sistemas-lineares-discretos-e-invariantes-ao-deslocamento-tempo" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><font size="4">Os Sistemas são classificados por suas propriedades ou categorias:</font></p></li>
+<li><p><font size="4">Linearidade - Causalidade - Estabilidade - Invariância ao deslocamento.</font></p></li>
+<li><p><font size="4">Os Sistemas lineares discretos e invariantes ao deslocamento (SLDI)</font></p></li>
+<li><p><font size="4">São caracterizados pela resposta à amostra unitária.</font></p></li>
+<li><p><font size="4">A expressão que relaciona entrada e saída é dada pela soma de convolução.</font></p></li>
+</ul>
+<section id="determinacao-da-resposta-do-sistema">
+<h3>7.1. Determinação da Resposta do Sistema<a class="headerlink" href="#determinacao-da-resposta-do-sistema" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Seja <span class="math notranslate nohighlight">\(h[n]\)</span> a resposta à excitação <span class="math notranslate nohighlight">\(\delta[n]\)</span></p></li>
+<li><p>Foi visto anteriormente podemos escrever <span class="math notranslate nohighlight">\(x[n]\)</span> com auxílio da função impulso tal que:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ x[n] = \sum_{k=-\infty}^{\infty}x[k]\cdot \delta[n-k] \]</div>
+<ul class="simple">
+<li><p>Pela definição tem-se que:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ y[n] = T[x[n]] = T\left[\sum_{k=-\infty}^{\infty}x[k]\delta[n-k]\right] \]</div>
+<ul class="simple">
+<li><p>Pelo princípio da superposição podemos trocar as ordens das operações de soma e transformação, assim:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ y[n] = \sum_{k=-\infty}^{\infty}x[k]T[\delta[n-k]] \]</div>
+<p>Como por hipótese o sistema é invariante ao deslocamento, então a resposta à excitação <span class="math notranslate nohighlight">\(\delta[n-k]\)</span> será <span class="math notranslate nohighlight">\(h[n-k]\)</span>. Assim:</p>
+<div class="math notranslate nohighlight">
+\[ y[n] = \sum_{k=-\infty}^{\infty}x[k]\cdot h[n-k] = x[n] \ast h[n]\]</div>
+<p><strong>Portanto:</strong> <span class="math notranslate nohighlight">\(y[n]\)</span> está relacionado com a entrada através da soma de convolução entre <span class="math notranslate nohighlight">\(x[n]\)</span> e <span class="math notranslate nohighlight">\(h[n]\)</span>.</p>
+</section>
+<section id="a-soma-de-convolucao">
+<h3>7.2. A Soma de Convolução<a class="headerlink" href="#a-soma-de-convolucao" title="Permalink to this heading">#</a></h3>
+<center>Suponha que se quer calcular a saída do sistema para $n = n_0$</center>
+<div class="math notranslate nohighlight">
+\[ y[n_0] = \sum_{k=-\infty}^{\infty}x[k]h[n_0-k] \]</div>
+<ol class="arabic simple">
+<li><p>Rebate-se <span class="math notranslate nohighlight">\(h[k]\)</span> em torno do índice zero <span class="math notranslate nohighlight">\(\Rightarrow\)</span> <span class="math notranslate nohighlight">\(h[-k]\)</span></p></li>
+<li><p>Desloca-se <span class="math notranslate nohighlight">\(h[-k]\)</span> por <span class="math notranslate nohighlight">\(n_0\)</span> amostras (à direita ou à esquerda)</p></li>
+<li><p>Multiplica-se cada elemento <span class="math notranslate nohighlight">\(x[k]\)</span> por <span class="math notranslate nohighlight">\(h[n_0-k]\)</span> para se obter a sequência produto <span class="math notranslate nohighlight">\(x[k]\)</span> <span class="math notranslate nohighlight">\(h[n_0-k]\)</span></p></li>
+<li><p>Soma-se todos os valores da sequência produto <span class="math notranslate nohighlight">\(\Rightarrow\)</span> <span class="math notranslate nohighlight">\(y[n_0]\)</span></p></li>
+<li><p>Repete-se os passos acima para todos os valores de <span class="math notranslate nohighlight">\(n\)</span>.</p></li>
+</ol>
+<p><font size="5"><strong>Exemplo 14:  Determine a convolução entre as seguintes sequências:</strong></font></p>
+<div class="math notranslate nohighlight">
+\[ h[n]=\{1, \underline{\underline{2}}, 1, -1\} \mbox{ e } x[n]=\{\underline{\underline{1}}, 2, 3, 1\}\]</div>
+<ol class="arabic simple">
+<li><p>Rebatimento de <span class="math notranslate nohighlight">\(h[k]\)</span>: <span class="math notranslate nohighlight">\(h[-k] = \{-1, 1, \underline{\underline{2}}, 1\}\)</span></p></li>
+<li><p>Cálculo de <span class="math notranslate nohighlight">\(y[0]\)</span>:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split} \begin{split} -1 \; 1 \; 2 \; 1 \; 0 \; 0 \; &amp; \; h[n-k] \mbox{: neste caso } h[-k] \\
+  0 \; 0 \; 1 \; 2 \; 3 \; 1 \; &amp; \; x[k] \\
+ ------ &amp; \\
+  0 \; 0 \; 2 \; 2 \; 0 \; 0 \; &amp; \Rightarrow \; y[0]=4 \end{split} \end{split}\]</div>
+<ol class="arabic simple" start="3">
+<li><p>No final tem-se:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[y[n] = x[n]\ast h[n] = \{1, \underline{\underline{4}}, 8, 8, 3, -2, -1\}\]</div>
+<ol class="arabic simple" start="4">
+<li><p>Tamanho da Sequência: <span class="math notranslate nohighlight">\(L=4+4-1=7\)</span></p></li>
+</ol>
+<center> Em geral: $L=M+N-1$ </center></section>
+<hr class="docutils" />
+<section id="propriedades-da-convolucao-e-interconexao-de-sistemas-sldi">
+<h3>7.3 Propriedades da Convolução e Interconexão de Sistemas SLDI<a class="headerlink" href="#propriedades-da-convolucao-e-interconexao-de-sistemas-sldi" title="Permalink to this heading">#</a></h3>
+<p>a) Comutativa:</p>
+<div class="math notranslate nohighlight">
+\[ [n]\ast h[n] = h[n]\ast x[n] = \sum_{k=-\infty}^{\infty}h[k]x[n-k]\]</div>
+<p>b) Associativa:</p>
+<div class="math notranslate nohighlight">
+\[ [x[n]\ast h_1[n]]\ast h_2[n] = x[n]\ast [h_1[n]\ast h_2[n]]\]</div>
+<p><img alt="Aula_3_Slide_19_1.png" src="_images/Aula_3_Slide_19_1.png" /></p>
+<p>c) Distributiva:</p>
+<div class="math notranslate nohighlight">
+\[ x[n]\ast [h_1[n] + h_2[n]] = x[n]\ast h_1[n] + x[n]\ast h_2[n]\]</div>
+<p><img alt="Aula_3_Slide_19_2.png" src="_images/Aula_3_Slide_19_2.png" /></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="causalidade-e-estabilidade-em-sistemas-sldi">
+<h2>8. Causalidade e Estabilidade em sistemas SLDI<a class="headerlink" href="#causalidade-e-estabilidade-em-sistemas-sldi" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Nos Sistemas lineares discretos e invariantes no tempo a estabilidade e causalidade são verificadas através de <span class="math notranslate nohighlight">\(h[n]\)</span>.</p></li>
+</ul>
+<p><font size="4">a) Causalidade:</font></p>
+<ul class="simple">
+<li><p>Considere um sistema SLDI em um instante <span class="math notranslate nohighlight">\(n_0\)</span> qualquer:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[y[n_0] = \sum_{k=-\infty}^{\infty}h[k]x[n_0-k]\]</div>
+<ul class="simple">
+<li><p>Desdobrando a equação acima tem-se:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[y[n_0] = \sum_{k=-\infty}^{-1}h[k]\cdot x[n_0-k] + \sum_{k=0}^{\infty}h[k]\cdot x[n_0-k] \]</div>
+<ul class="simple">
+<li><p>1º. Termo envolve os valores futuros <span class="math notranslate nohighlight">\(x[n_0+1]\)</span>, <span class="math notranslate nohighlight">\(x[n_0+2] \dots\)</span></p></li>
+<li><p>Para <span class="math notranslate nohighlight">\(y[n_0]\)</span> não depender deles: <span class="math notranslate nohighlight">\(h[-1] = h[-2] = \dots = 0\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mbox{sistema causal} \; \Rightarrow \; h[n]=0, \; n&lt;0\]</div>
+<ul class="simple">
+<li><p>Para um sistema causal é válida a expressão:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[y[n] = \sum_{k=0}^{\infty}h[k]x[n-k]\]</div>
+<p><font size="4">b) Estabilidade: Entrada limitada <span class="math notranslate nohighlight">\(\Rightarrow\)</span> Saída limitada</font></p>
+<div class="math notranslate nohighlight">
+\[|y[n]| = |\sum_{k=-\infty}^{\infty}h[k]x[n-k]| \leq \sum_{k=-\infty}^{\infty}|h[k]||x[n-k]|\]</div>
+<div class="math notranslate nohighlight">
+\[\mbox{Como por hipótese }|x[n]| \leq B_x \; \Rightarrow \; |y[n]| \leq B_x \sum_{k=-\infty}^{\infty}|h[k]|\]</div>
+<div class="math notranslate nohighlight">
+\[\mbox{Como por hipótese }|y[n]| \leq B_y \; \Rightarrow \; \sum_{k=-\infty}^{\infty}|h[k]| \leq B_h &lt; \infty\]</div>
+<p>Consequência: <span class="math notranslate nohighlight">\(h[n]\)</span> deve ser absolutamente somável, isto é, decair para zero conforme <span class="math notranslate nohighlight">\(n\rightarrow \infty\)</span></p>
+</section>
+<hr class="docutils" />
+<section id="observacoes">
+<h2>9. Observações<a class="headerlink" href="#observacoes" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>A resposta ao impulso classifica os sistemas SLDI quanto à sua duração:</p></li>
+<li><p>FIR: Resposta ao Impulso Finita</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ h[n]=0,\; n&gt;N_1\mbox{ e } n&lt;N_2 \]</div>
+<div class="math notranslate nohighlight">
+\[ \mbox{São sempre estáveis} \]</div>
+<ol class="arabic simple" start="3">
+<li><p>IIR: Resposta ao Impulso Infinita</p></li>
+</ol>
+<ul class="simple">
+<li><p>Sistemas Contínuos: <span class="math notranslate nohighlight">\(h(t)\)</span> <span class="math notranslate nohighlight">\(\Rightarrow\)</span> Papel teórico.</p></li>
+<li><p>Sistemas Discretos: <span class="math notranslate nohighlight">\(h[n]\)</span> <span class="math notranslate nohighlight">\(\Rightarrow\)</span> Papel teórico e prático (Implementação)</p></li>
+</ul>
+<ol class="arabic simple" start="4">
+<li><p>Processamento em Tempo-Real e Realizável</p></li>
+</ol>
+<ul class="simple">
+<li><p>Um sinal pode ser processado em tempo-real (produzindo uma saída em cada amostra de tempo <span class="math notranslate nohighlight">\(n\)</span> se o sistema é causal. Caso contrário (na melhor das hipóteses) precisa esperar um atraso até que a amostra no fututo chegue no instante presente.</p></li>
+<li><p>Se não for necessários um processamento em tempo-real então o sistema é conhecido como realizável se a saída pode ser calcula fazendo o atraso da entrada</p></li>
+<li><p>Um sistema com infinitos coeficientes não-causais é não-realizavel.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="equacao-linear-de-diferencas">
+<h2>10. Equação Linear de Diferenças<a class="headerlink" href="#equacao-linear-de-diferencas" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Formas de descrever um sistema SLDI:</p></li>
+<li><p>Resposta ao impulso <span class="math notranslate nohighlight">\(h[n]\)</span> e soma de convolução.</p></li>
+<li><p>Resposta em frequência do sistema: <span class="math notranslate nohighlight">\(H(f)\)</span> ou <span class="math notranslate nohighlight">\(H(z)\)</span>.</p></li>
+</ul>
+</section>
+<section id="equacao-linear-de-diferencas-com-coeficientes-constantes">
+<h2>Equação linear de diferenças com coeficientes constantes.<a class="headerlink" href="#equacao-linear-de-diferencas-com-coeficientes-constantes" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>O sistema é descrito em termos dos valores presente e passados do sinal de entrada, e também em termos dos valores passados da saída.</p></li>
+<li><p>O sistema é prontamente implementado através de blocos de atraso.</p>
+<ul>
+<li><p>Serve como base para a obtenção da resposta em frequência do sistema</p></li>
+</ul>
+</li>
+</ul>
+<center> <font size="4">Equação Geral</font> </center>
+<p><font size="4">$<span class="math notranslate nohighlight">\(y[n] = -\sum_{k=1}^{N}a_ky[n-k] + \sum_{k=0}^{M}b_kx[n-k]\)</span>$</font></p>
+<p>em que: <span class="math notranslate nohighlight">\(a_k\)</span> e <span class="math notranslate nohighlight">\(b_k\)</span> são constantes e independentes de <span class="math notranslate nohighlight">\(x[n]\)</span> e <span class="math notranslate nohighlight">\(y[n]\)</span>.</p>
+<p><span class="math notranslate nohighlight">\(N\)</span> é denominado de ordem do sistema.</p>
+<center> <font size="4">Forma equivalente</font> </center>
+<p><font size="4">$<span class="math notranslate nohighlight">\(\sum_{k=0}^{N}a_ky[n-k] = \sum_{k=0}^{M}b_kx[n-k]\)</span>$</font></p>
+<ul class="simple">
+<li><p>em geral, <span class="math notranslate nohighlight">\(a_0=1\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(y[n]\)</span> depende de <span class="math notranslate nohighlight">\(y[-1], y[-2], \dots\)</span> (condições iniciais).</p></li>
+<li><p>Para condições iniciais nulas <span class="math notranslate nohighlight">\(\Rightarrow\)</span> o sistema está em repouso.</p></li>
+<li><p>O sistema é recursivo pois a saída depende de valores passados de <span class="math notranslate nohighlight">\(y[n]\)</span>.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[y[n] = -\sum_{k=1}^{N}a_ky[n-k] + \sum_{k=0}^{M}b_kx[n-k]\]</div>
+<ul class="simple">
+<li><p>A equação acima é a forma geral para um sistema IIR.</p></li>
+<li><p>Para um sistema FIR: <span class="math notranslate nohighlight">\(a_k = 0\)</span>, <span class="math notranslate nohighlight">\(k = 1, 2, \dots, N\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[y[n] = \sum_{k=0}^{M}b_kx[n-k]\]</div>
+<ul class="simple">
+<li><p>Neste caso: <span class="math notranslate nohighlight">\(h(n)=b_k\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}h[n] = \begin{cases} b_n, &amp; n = 0, 1, \dots, M \\ 0, &amp; cc \end{cases}\end{split}\]</div>
+<p><font size="4"><strong>Exemplo 15: Determine a equação de diferenças do acumulador e o seu diagrama de blocos.</strong></font>
+$<span class="math notranslate nohighlight">\( y[n] = \sum_{k=0}^{n}x[k] \)</span>$</p>
+<div class="math notranslate nohighlight">
+\[ y[n] = \sum_{k=0}^{n-1}x[k]+x[n] \; \Rightarrow \; y[n] = y[n-1] + x[n] \]</div>
+<ul class="simple">
+<li><p>Neste caso: <span class="math notranslate nohighlight">\(N=1\)</span>; <span class="math notranslate nohighlight">\(a_1=1\)</span>; <span class="math notranslate nohighlight">\(M=0\)</span> e <span class="math notranslate nohighlight">\(b_0=1\)</span></p></li>
+</ul>
+<p><img alt="Aula_3_Slide_27.png" src="_images/Aula_3_Slide_27.png" /></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Aula%2002%20-%20Sinais%20em%20Tempo%20Discreto.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Aula 2 - Sinais em Tempo Discreto</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Aula%2004%20-%20Transformada%20de%20Fourier%20em%20Tempo%20Discreto.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Aula 4 - Transformada de Fourier em Tempo Discreto</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introducao">1. Introdução</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-lineares-discretos-no-tempo">2. Sistemas Lineares Discretos no Tempo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-invariante-ao-deslocamento">3. Sistemas Invariante ao Deslocamento</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-causais">4. Sistemas Causais</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-estaveis">5. Sistemas Estáveis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#representacao-em-diagrama-de-blocos">6. Representação em Diagrama de Blocos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sistemas-lineares-discretos-e-invariantes-ao-deslocamento-tempo">7. Sistemas Lineares Discretos e Invariantes ao Deslocamento (tempo)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determinacao-da-resposta-do-sistema">7.1. Determinação da Resposta do Sistema</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-soma-de-convolucao">7.2. A Soma de Convolução</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#propriedades-da-convolucao-e-interconexao-de-sistemas-sldi">7.3 Propriedades da Convolução e Interconexão de Sistemas SLDI</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalidade-e-estabilidade-em-sistemas-sldi">8. Causalidade e Estabilidade em sistemas SLDI</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observacoes">9. Observações</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equacao-linear-de-diferencas">10. Equação Linear de Diferenças</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equacao-linear-de-diferencas-com-coeficientes-constantes">Equação linear de diferenças com coeficientes constantes.</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Carlos Dias Maciel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

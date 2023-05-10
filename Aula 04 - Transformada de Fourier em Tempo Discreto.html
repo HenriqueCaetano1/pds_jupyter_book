@@ -1,0 +1,712 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Aula 4 - Transformada de Fourier em Tempo Discreto &#8212; Notas de Aula - Processamento Digital de Sinais</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Aula 04 - Transformada de Fourier em Tempo Discreto';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Aula 5 - Amostragem" href="Aula%2005%20-%20Amostragem.html" />
+    <link rel="prev" title="Aula 3 - Sistemas em Tempo Discreto" href="Aula%2003%20-%20Sistemas%20em%20tempos%20discreto.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo_lps.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo_lps.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Notas de Aula - Processamento Digital de Sinais
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Aula%2001%20-%20Introdu%C3%A7%C3%A3o.html">Aula 1 - Introdução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2002%20-%20Sinais%20em%20Tempo%20Discreto.html">Aula 2 - Sinais em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2003%20-%20Sistemas%20em%20tempos%20discreto.html">Aula 3 - Sistemas em Tempo Discreto</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Aula 4 - Transformada de Fourier em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2005%20-%20Amostragem.html">Aula 5 - Amostragem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2006%20-%20Transformada%20Z.html">Aula 6 - Transformada Z</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FAula 04 - Transformada de Fourier em Tempo Discreto.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Aula 04 - Transformada de Fourier em Tempo Discreto.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Aula 4 - Transformada de Fourier em Tempo Discreto</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transformada-de-fourier-de-sequencias">Transformada de Fourier de Sequências</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#propriedades-da-transformada-de-fourier">3. Propriedades da Transformada de Fourier</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="aula-4-transformada-de-fourier-em-tempo-discreto">
+<h1>Aula 4 - Transformada de Fourier em Tempo Discreto<a class="headerlink" href="#aula-4-transformada-de-fourier-em-tempo-discreto" title="Permalink to this heading">#</a></h1>
+<p>Versão 2023</p>
+<p>Essas notas de aula podem ser compartilhadas nos termos da lincença Creative Commons CC BY-NC-ND 4.0, com propósitos exclusivamente educacionais.</p>
+<p>Attribution-NonCommercial-NoDerivatives 4.0 International</p>
+<p><font size="6"><strong>Introdução</strong></font></p>
+<ul class="simple">
+<li><p>A representação de Sistemas Lineares através de senóides ou exponenciais complexas é muito usual devido ao fato de que para estes sinais o sinal de saída é o mesmo sinal (senoidal) da entrada, com amplitude e fase determinadas ou modificadas pela resposta sistema.</p></li>
+<li><p>Considere um sistema LTI com resposta ao impulso <span class="math notranslate nohighlight">\(h[n]\)</span> em cuja entrada é aplicado o sinal <span class="math notranslate nohighlight">\(x[n] = e^{jwn}\)</span>.</p></li>
+<li><p>Como a saída é a convolução da entrada <span class="math notranslate nohighlight">\(e^{jwn}\)</span> com a resposta ao impulso <span class="math notranslate nohighlight">\(h[n]\)</span> tem-se que:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[y[n] = \sum_{k=-\infty}^{\infty}h[k]\cdot e^{jw(n-k)}\]</div>
+<ul class="simple">
+<li><p>Como o índice <span class="math notranslate nohighlight">\(n\)</span> não entra na somatória, então:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[y[n] = e^{jwn} \sum_{k=-\infty}^{\infty}h[k]e^{-jwk}\]</div>
+<ul class="simple">
+<li><p>Definindo a função <span class="math notranslate nohighlight">\(H(e^{jw})\)</span> tal que:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[H(e^{jw}) = \sum_{k=-\infty}^{\infty}h[k]e^{-jwk}\]</div>
+<p>onde <span class="math notranslate nohighlight">\(H(e^{jw})\)</span>: é chamada de Resposta em Frequência do sistema.</p>
+<ul class="simple">
+<li><p>Observe que <span class="math notranslate nohighlight">\(H(e^{jw})\)</span> é a transformada de Fourier da sequência <span class="math notranslate nohighlight">\(h[n]\)</span>.</p></li>
+<li><p>Para uma freqüência particular <span class="math notranslate nohighlight">\(w_0\)</span> tem-se:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[y[n] = H(e^{jw_0}) e^{jw_0n}\]</div>
+<p>ou seja: <span class="math notranslate nohighlight">\(H(e^{jw})\)</span> modifica a amplitude e fase de <span class="math notranslate nohighlight">\(e^{jwn}\)</span></p>
+<p><font size="4">Principal característica de uma sinal amostrado no tempo</font></p>
+<p><img alt="amostragem" src="_images/Aula_4_AmostragemPeriodica.png" /></p>
+<hr class="docutils" />
+<ul class="simple">
+<li><p>O conceito de resposta em frequência para sistemas contínuos e discretos no tempo é o mesmo.</p></li>
+<li><p>Contudo, para os sistemas discretos a resposta em frequência é periódica com período <span class="math notranslate nohighlight">\(2\pi\)</span>.</p></li>
+</ul>
+<p><font size="5"><strong>Prova:</strong></font></p>
+<div class="math notranslate nohighlight">
+\[ H(e^{j(w+2\pi)}) = \sum_{n=-\infty}^{\infty}h[n]e^{-j(w+2\pi)n} = \sum_{n=-\infty}^{\infty}h[n]e^{-jwn}e^{-j2\pi n}\]</div>
+<ul class="simple">
+<li><p>Como <span class="math notranslate nohighlight">\(e^{-j2\pi n} = \cos(2\pi n) - j\sin(2\pi n) = 1\)</span>, então:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[H(e^{j(w+2\pi)}) = \sum_{n=-\infty}^{\infty}h(n)e^{-jwn} = H(e^{jw})\]</div>
+<ul class="simple">
+<li><p>Portanto <span class="math notranslate nohighlight">\(H(e^{jw})\)</span> é periódica com período <span class="math notranslate nohighlight">\(2\pi\)</span>.</p></li>
+</ul>
+<p><font size="5">Representação de <span class="math notranslate nohighlight">\(H(e^{jw})\)</span> pelo módulo e fase:</font></p>
+<p><font size="4">$<span class="math notranslate nohighlight">\(H(e^{jw}) = \underbrace{|H(e^{jw})|}_{\text{Resposta de amplitude}}\cdot \underbrace{e^{j\angle H(e^{jw})}}_{\text{Resposta de fase}}\)</span>$</font></p>
+<p><strong>Exemplo 1: Resposta em frequência do sistema <span class="math notranslate nohighlight">\(y(n) = x(n-n_d)\)</span></strong></p>
+<ul class="simple">
+<li><p>Aplicando o sinal <span class="math notranslate nohighlight">\(x(n) = e^{jwn}\)</span> tem-se:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ y(n) = e^{jw(n-n_d)} = e^{-jwn_d}e^{jwn} \]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} \Rightarrow \; H(e^{jw}) = e^{-jwn_d} \; \Rightarrow \; \begin{cases} |H(e^{jw})| = 1 \\ \angle H(e^{jw}) = -wn_d \end{cases} \end{split}\]</div>
+<ul class="simple">
+<li><p>Como <span class="math notranslate nohighlight">\(H(e^{jw})\)</span> é periódica com período <span class="math notranslate nohighlight">\(2\pi\)</span>, ela sempre será expressa em um dos seguintes intervalos:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{cases} 0 \leq w &lt; 2\pi \\ -\pi &lt; w \leq \pi \end{cases} \;\; \begin{cases} 0 \leq f &lt; 1 \\ -0.5 &lt; f \leq 0.5 \end{cases}\end{split}\]</div>
+<ul class="simple">
+<li><p>Frequências digitais entre <span class="math notranslate nohighlight">\(-\pi\)</span> e <span class="math notranslate nohighlight">\(\pi\)</span> ou entre <span class="math notranslate nohighlight">\(-0.5\)</span> e <span class="math notranslate nohighlight">\(0.5\)</span>, significam que o sistema é representado pelas frequências no tempo contínuo em um dos intervalos entre <span class="math notranslate nohighlight">\(-\Omega_a/2\)</span> e <span class="math notranslate nohighlight">\(\Omega_a/2\)</span> ou <span class="math notranslate nohighlight">\(-F_a/2\)</span> e <span class="math notranslate nohighlight">\(F_a/2\)</span>.</p></li>
+</ul>
+<p><img alt="aula_4_slide_6" src="_images/Aula_4_Slide_6.png" /></p>
+<section id="transformada-de-fourier-de-sequencias">
+<h2>Transformada de Fourier de Sequências<a class="headerlink" href="#transformada-de-fourier-de-sequencias" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>O par de transformada de Fourier de uma sequência ou sinal discreto <span class="math notranslate nohighlight">\(x(n)\)</span> é definido por:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(e^{jw}) = \sum_{n=-\infty}^{\infty}x[n]e^{-jwn} \; \Longleftarrow \; \text{equação de análise} \]</div>
+<div class="math notranslate nohighlight">
+\[ x[n] = \frac{1}{2\pi}\int_{-\pi}^{\pi}X(e^{jw})e^{jwn}dw \; \Longleftarrow \; \text{equação de síntese}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} X(e^{jw}) \; \Rightarrow \; \begin{cases} |X(e^{jw})| &amp;\; \Longleftarrow \; \text{Espectro de Amplitude} \\ ARG[X(e^{jw})] &amp;\; \Longleftarrow \; \begin{split} &amp;\text{Espectro de Fase} \\ &amp;\text{(Valor Principal)}\end{split} \end{cases} \end{split}\]</div>
+<p><font size="5"><strong>Condições de validade</strong></font></p>
+<ul class="simple">
+<li><p>Para que a transformada de Fourier exista (convergência). A seguinte condição deve ser satisfeita:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[|X(e^{jw})|&lt;\infty,\text{ para todo }w\]</div>
+<ul class="simple">
+<li><p>Observe que:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ |X(e^{jw})| = \left|\sum_{n=-\infty}^{\infty}x[n]e^{-jwn}\right| \leq \sum_{n=-\infty}^{\infty}|x(n)||e^{-jwn}| \]</div>
+<div class="math notranslate nohighlight">
+\[ |X(e^{jw})| \leq \sum_{n=-\infty}^{\infty}|x[n]| &lt; \infty \]</div>
+<ul class="simple">
+<li><p>A condição suficiente para que a transformada exista é que <span class="math notranslate nohighlight">\(x(n)\)</span> seja absolutamente somável, isto é:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\sum_{n=-\infty}^{\infty}|x[n]| &lt; \infty\]</div>
+<p><font size="4"><strong>Exemplo 2: Determine a transformada de Fourier de:</strong></font></p>
+<div class="math notranslate nohighlight">
+\[ x[n] = a^n u[n] \]</div>
+<div class="math notranslate nohighlight">
+\[ X(e^{jw}) = \sum_{n=0}^{\infty}a^ne^{-jwn} = \sum_{n=0}^{\infty}(ae^{-jw})^n \]</div>
+<ul class="simple">
+<li><p>Admitindo <span class="math notranslate nohighlight">\(|ae^{-jw}|&lt;1\)</span> que é equivalente a admitir <span class="math notranslate nohighlight">\(|a|&lt;1\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(e^{jw}) = \frac{1}{1-ae^{-jw}} \]</div>
+<p><img alt="aula_4_slide_9" src="_images/Aula_4_Slide_9.png" /></p>
+<p><font size="4">Exemplo 3: Determine a transformada de Fourier de:</font></p>
+<div class="math notranslate nohighlight">
+\[\begin{split} x[n] = \begin{cases} A, &amp;0 \leq n \leq M-1 \\ 0, &amp;c.c. \end{cases} \end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[ X(e^{jw}) = \sum_{n=0}^{M-1}Ae^{-jwn} = A \frac{1-e^{-jwM}}{1-e^{-jw}} = Ae^{-jw(M-1)/2}\frac{\sin(wM/2)}{\sin(w/2)} \]</div>
+<p><img alt="aula_4_slide_10" src="_images/Aula_4_Slide_10.png" /></p>
+<p><font size="6">2.1. Espectro Densidade de Energia</font></p>
+<p><font size="5"><strong>Teorema de Parseval</strong></font></p>
+<ul class="simple">
+<li><p>A energia de uma sequência é definida como:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[E_x = \sum_{n=-\infty}^{\infty}|x(n)|^2\]</div>
+<div class="math notranslate nohighlight">
+\[E_x = \frac{1}{2\pi} \int_{-\pi}^{\pi} |X(e^{jw})|^2 dw\]</div>
+<ul class="simple">
+<li><p>A quantidade: <span class="math notranslate nohighlight">\(S_x(f) = |X(e^{jw})|^2\)</span> representa a distribuição da Energia de <span class="math notranslate nohighlight">\(x(n)\)</span> em função da frequência e por isso ela é chamada de <strong>Densidade Espectral de Energia</strong>.</p></li>
+</ul>
+<p><font size="5"><strong>Interpretação da densidade espectral de energia</strong></font></p>
+<p><img alt="aula_4_slide_9" src="_images/Aula_4_Spectral-energy-distribution.png" /></p>
+<hr class="docutils" />
+<p><font size="4"><strong>Exemplo 4: Para o sinal do exemplo 3</strong></font></p>
+<div class="math notranslate nohighlight">
+\[\begin{split} |X(e^{jw})|^2 = \begin{cases} A^2\left| \frac{\sin(wM/2)}{\sin(w/2)} \right|^2 \\ (AM)^2, \; w=0 \end{cases} \end{split}\]</div>
+<ul class="simple">
+<li><p>Esta definição é útil quando se trabalha com sinais aleatórios onde é definido o <strong>Espectro Densidade de Potência</strong>.</p></li>
+</ul>
+</section>
+<section id="propriedades-da-transformada-de-fourier">
+<h2>3. Propriedades da Transformada de Fourier<a class="headerlink" href="#propriedades-da-transformada-de-fourier" title="Permalink to this heading">#</a></h2>
+<p><font size="5"><strong>3.1. Propriedades de Simetria</strong></font></p>
+<center> Sequência Conjugada Simétrica (Par) </center>
+<div class="math notranslate nohighlight">
+\[ x_e(n) = x_e^\ast(-n) = \frac{1}{2}[x(n)+x^\ast(-n)] \]</div>
+<center> Sequência Conjugada Antissimétrica (Ímpar) </center>
+<div class="math notranslate nohighlight">
+\[ x_0(n) = -x_0^\ast(-n) = \frac{1}{2}[x(n)-x^\ast(-n)] \]</div>
+<p><font size="5"><strong>Sequência Complexas</strong></font></p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(x^\ast[n] \leftrightarrow X^\ast(e^{-jw})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(Re\{x[n]\} \leftrightarrow X_e(e^{jw})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(Im\{x[n]\} \leftrightarrow X_0(e^{jw})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(x_e[n] \leftrightarrow X_R(e^{jw})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(x_0[n] \leftrightarrow X_I(e^{jw})\)</span></p></li>
+</ol>
+<p><font size="5"><strong>Sequência Reais</strong></font></p>
+<ol class="arabic simple" start="6">
+<li><p><span class="math notranslate nohighlight">\(X(e^{jw}) = X^\ast(e^{-jw})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(X_R(e^{jw}) = X_R(e^{-jw})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(X_I(e^{jw}) = -X_I(e^{-jw})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(|X(e^{jw})| = |X(e^{-jw})|\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\angle X(e^{jw}) = -\angle X(e^{-jw})\)</span></p></li>
+</ol>
+<p><font size="5"><strong>Propriedades e Teoremas Gerais</strong></font></p>
+<ol class="arabic simple">
+<li><p>Linearidade: <span class="math notranslate nohighlight">\(ax(n)+by(n) \leftrightarrow aX(e^{jw})+bY(e^{jw}) \)</span></p></li>
+<li><p>Desl. no tempo: <span class="math notranslate nohighlight">\(x(n-n_d) \leftrightarrow e^{-jwn_d}X(e^{jw})\)</span></p></li>
+<li><p>Desl. na freq.: <span class="math notranslate nohighlight">\(e^{-jw_0n}x(n) \leftrightarrow X(e^{j(w-w_0)})\)</span></p></li>
+<li><p>Inv. do tempo: <span class="math notranslate nohighlight">\(x(-n) \leftrightarrow X(e^{-jw})\)</span></p></li>
+<li><p>Diferenciação: <span class="math notranslate nohighlight">\(nx(n) \leftrightarrow j\frac{d}{dw}X(e^{jw})\)</span></p></li>
+<li><p>Parseval:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ E_x = \sum_{n=-\infty}^{\infty}|x[n]|^2 = \frac{1}{2\pi}\int_{-\pi}^{\pi}|X(e^{jw})|^2dw \]</div>
+<p><font size="5"><strong>7. Convolução:</strong></font></p>
+<div class="math notranslate nohighlight">
+\[ x(n)\ast y(n) \leftrightarrow X(e^{jw})Y(e^{jw}) \]</div>
+<p><font size="5"><strong>8. Modulação:</strong></font></p>
+<div class="math notranslate nohighlight">
+\[ w(n)x(n) \leftrightarrow W(e^{jw})\ast X(e^{jw})= \frac{1}{2\pi} \int_{-\pi}^{\pi}X(e^{j\theta}) W(e^{j(w-\theta)})d\theta \]</div>
+<p>caso: <span class="math notranslate nohighlight">\(x(n)\cos(w_0n) \leftrightarrow \frac{1}{2}[X(e^{j(w+w_0)})+X(e^{j(w-w_0)})]\)</span></p>
+<p><font size="5">Exemplo 5: Determine a transformada de Fourier de:</font></p>
+<div class="math notranslate nohighlight">
+\[ x[n] = a^{|n|},\; |a|&lt;1 \]</div>
+<ul class="simple">
+<li><p>Podemos expressar <span class="math notranslate nohighlight">\(x(n)\)</span> como: <span class="math notranslate nohighlight">\(x_1(n) + x_2(n)\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ x_1(n)=a^n,\; n\geq0 \; \leftrightarrow \; X_1(e^{jw})=\frac{1}{1-ae^{-jw}} \]</div>
+<div class="math notranslate nohighlight">
+\[ x_2(n)=a^{-n},\; n&lt;0 \; \leftrightarrow \; X_2(e^{jw})=\sum_{n=-\infty}^{-1}a^{-n}e^{-jwn} = \sum_{n=1}^{\infty}(ae^{jw})^n \]</div>
+<div class="math notranslate nohighlight">
+\[ \Longrightarrow \; X_2(e^{jw}) = \frac{ae^{jw}}{1-ae^{jw}} \]</div>
+<ul class="simple">
+<li><p>Combinando as duas transformadas (propriedade da linearidade):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(e^{jw}) = X_1(e^{jw}) + X_2(e^{jw}) = \frac{1}{1-ae^{-jw}} + \frac{ae^{jw}}{1-ae^{jw}} \]</div>
+<div class="math notranslate nohighlight">
+\[ \Longrightarrow \; X(e^{jw}) = \frac{1-a^2}{1-2a\cos(w)+a^2} \]</div>
+<p><font size="5">Exemplo 6: Função de transferência do Filtro de média móvel:</font></p>
+<div class="math notranslate nohighlight">
+\[ y(n) = \frac{1}{3}[x(n+1) + x(n) + x(n-1)]\]</div>
+<ul class="simple">
+<li><p>Neste caso: <span class="math notranslate nohighlight">\(h(n) = \frac{1}{3}\delta(n+1) + \frac{1}{3}\delta(n) + \frac{1}{3}\delta(n-1)\)</span></p></li>
+</ul>
+<p>para isso usou-se a propriedade <span class="math notranslate nohighlight">\(x[n-k] = x[n]\ast \delta[n-k]\)</span> e que <span class="math notranslate nohighlight">\(y[n] = h[n]\ast x[n]\)</span></p>
+<ul class="simple">
+<li><p>Combinando as propriedade de linearidade, <span class="math notranslate nohighlight">\(TF\{\delta[n]\} = 1\)</span> e deslocamento no tempo tem-se:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ H(e^{jw}) =  \frac{1}{3}[e^{jw} + 1 + e^{-jw}] = \frac{1}{3} + \frac{2}{3}\cos(w)\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} |H(e^{jw})| = \frac{1}{3}|1+2\cos(w)| \; \; \Phi(w) = \begin{cases} 0, &amp;0\leq w &lt; \frac{2\pi}{3} \\ \pi, &amp;\frac{2\pi}{3}\leq w &lt; \pi \end{cases} \end{split}\]</div>
+<p><img alt="aula_4_slide_17" src="_images/Aula_4_Slide_17.png" /></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Aula%2003%20-%20Sistemas%20em%20tempos%20discreto.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Aula 3 - Sistemas em Tempo Discreto</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Aula%2005%20-%20Amostragem.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Aula 5 - Amostragem</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transformada-de-fourier-de-sequencias">Transformada de Fourier de Sequências</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#propriedades-da-transformada-de-fourier">3. Propriedades da Transformada de Fourier</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Carlos Dias Maciel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
