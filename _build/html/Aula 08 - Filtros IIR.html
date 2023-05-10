@@ -1,0 +1,962 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Aula 8 - Filtros IIR &#8212; Notas de Aula - Processamento Digital de Sinais</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Aula 08 - Filtros IIR';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Aula 9 - Filtros FIR - Parte 1" href="Aula%2009%20-%20Filtros%20FIR%20-%20Parte%201.html" />
+    <link rel="prev" title="Aula 7 - Transformada Discreta de Fourier" href="Aula%2007%20-%20Transformada%20Discreta%20de%20Fourier.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo_lps.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo_lps.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Notas de Aula - Processamento Digital de Sinais
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Aula%2001%20-%20Introdu%C3%A7%C3%A3o.html">Aula 1 - Introdução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2002%20-%20Sinais%20em%20Tempo%20Discreto.html">Aula 2 - Sinais em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2003%20-%20Sistemas%20em%20tempos%20discreto.html">Aula 3 - Sistemas em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2004%20-%20Transformada%20de%20Fourier%20em%20Tempo%20Discreto.html">Aula 4 - Transformada de Fourier em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2005%20-%20Amostragem.html">Aula 5 - Amostragem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2006%20-%20Transformada%20Z.html">Aula 6 - Transformada Z</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2007%20-%20Transformada%20Discreta%20de%20Fourier.html">Aula 7 - Transformada Discreta de Fourier</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Aula 8 - Filtros IIR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2009%20-%20Filtros%20FIR%20-%20Parte%201.html">Aula 9 - Filtros FIR - Parte 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2010%20-%20Filtros%20FIR%20-%20Parte%202.html">Aula 10 - Filtros FIR - Parte 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2011%20-%20Filtros%20FIR%20-%20Parte%203.html">Aula 11 - Filtros FIR - Parte 3</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FAula 08 - Filtros IIR.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Aula 08 - Filtros IIR.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Aula 8 - Filtros IIR</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exemplo-projeto-de-um-filtro-passa-banda-pelo-metodo-de-invariancia-ao-impulso">Exemplo:  Projeto de um filtro passa-banda pelo método de Invariância ao Impulso.</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#s-frac-2-t-left-frac-r-2-1-1-r-2-2r-cos-w-j-frac-2r-sin-w-1-r-2-2r-cos-w-right-text-se-r-1-rightarrow-sigma-0-text-polos-dentro-do-circulo-unitario"><span class="math notranslate nohighlight">\( s = \frac{2}{T} \left( \frac{r^2-1}{1+r^2+2r\cos(w)}+j\frac{2r\sin(w)}{1+r^2+2r\cos(w)} \right) \text{ se } r&lt;1 \Rightarrow \sigma&lt;0 \text{ Pólos dentro do círculo unitário} \)</span></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="aula-8-filtros-iir">
+<h1>Aula 8 - Filtros IIR<a class="headerlink" href="#aula-8-filtros-iir" title="Permalink to this heading">#</a></h1>
+<p>Versão 2023</p>
+<p>Essas notas de aula podem ser compartilhadas nos termos da lincença Creative Commons CC BY-NC-ND 4.0, com propósitos exclusivamente educacionais.</p>
+<p>Attribution-NonCommercial-NoDerivatives 4.0 International</p>
+<p>FILTROS DIGITAIS - Projetos de Filtros Seletivos em Frequência.</p>
+<ul>
+<li><p>Filtros IIR: Resposta ao Impulso Infinita.</p>
+<ul class="simple">
+<li><p>Projeto baseado nos Filtros Contínuos.</p></li>
+<li><p>Três tipos de projeto: Aproximação das derivadas, Invariância ao impulso e Transformação bilinear.</p></li>
+</ul>
+</li>
+<li><p>Filtros FIR: Resposta ao Impulso Finita.</p>
+<p><span class="math notranslate nohighlight">\(h[n] \neq 0,\; n = 0, 1, 2, \dots, M-1\)</span>.</p>
+<ul class="simple">
+<li><p>Filtros com fase linear.</p></li>
+<li><p>Sempre estável</p></li>
+<li><p>Projeto por janelas e por amostragem em frequência.</p></li>
+</ul>
+</li>
+</ul>
+<p><font size="6">Implementação do Filtro Digital</font></p>
+<ul class="simple">
+<li><p>IIR, <span class="math notranslate nohighlight">\(y[n] = \sum_{k=0}^{\infty}x[n-k]h[k]\)</span></p></li>
+<li><p>FIR,  <span class="math notranslate nohighlight">\(y[n] = \sum_{k=0}^{N-1}x[n-k]h[k]\)</span></p></li>
+</ul>
+<p><img alt="implementacao_fir" src="_images/implementacao_fir.png" /></p>
+<p><font size="6">Exemplo de um filtro IIR</font></p>
+<ul class="simple">
+<li><p>Equação de diferenças de um filtro IIR</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ y[n] = x[n] + 0.5y[n-1] \]</div>
+<ul class="simple">
+<li><p>Transformada z</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ H(z) = \frac{Y(z)}{X(z)} = \frac{1}{1-0.5z^{-1}} \]</div>
+<ul class="simple">
+<li><p>Resposta de frequência (<span class="math notranslate nohighlight">\(z = e^{j\omega}\)</span>)</p></li>
+</ul>
+<p><img alt="aula_8_slide_5" src="_images/Aula_8_Slide_5.png" /></p>
+<ul class="simple">
+<li><p>Diagrama de blocos</p></li>
+</ul>
+<p><img alt="aula_8_slide_5" src="_images/Aula_8_Slide_6.png" /></p>
+<p><font size="6">Introdução aos Filtros</font></p>
+<ul class="simple">
+<li><p>Filtros:</p>
+<ul>
+<li><p>São uma classe muito importante de sistemas lineares lineares invariantes no tempo.</p></li>
+<li><p>São aplicados onde há necessidade de tratamento do sinal.</p></li>
+</ul>
+</li>
+<li><p>Função:</p>
+<ul>
+<li><p>Deixar passar algumas componentes de frequência de um sinal e rejeitar outras.</p></li>
+</ul>
+</li>
+<li><p>Definição:</p>
+<ul>
+<li><p>Um sistema que modifica as componentes de frequência de um sinal aplicado em sua entrada.</p></li>
+</ul>
+</li>
+<li><p>Notação:</p>
+<ul>
+<li><p>Frequência analógica: <span class="math notranslate nohighlight">\(\Omega (rad/s)\)</span> e <span class="math notranslate nohighlight">\(F (Hz)\)</span>.</p>
+<ul>
+<li><p>limites positivos: <span class="math notranslate nohighlight">\([0 - \infty[\)</span></p></li>
+</ul>
+</li>
+<li><p>Frequência digital: <span class="math notranslate nohighlight">\(w\)</span> ou <span class="math notranslate nohighlight">\(f\)</span>.</p>
+<ul>
+<li><p>limites positivos: <span class="math notranslate nohighlight">\([0 - \pi]\)</span> ou <span class="math notranslate nohighlight">\([0 - 0.5]\)</span></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Relação entre frequência analógica e digital:</p>
+<ul>
+<li><p>Em que: <span class="math notranslate nohighlight">\(F_a\)</span> é a frequência de amostragem
+$<span class="math notranslate nohighlight">\( w = \frac{\Omega}{F_a} \text{ ou } f=\frac{F}{F_a} \)</span>$</p></li>
+</ul>
+</li>
+</ul>
+<p><font size="6"><strong>Característica em Frequência dos Filtros Seletivos Ideais</strong></font></p>
+<p>Parâmetros</p>
+<ul class="simple">
+<li><p>Frequência de corte</p></li>
+<li><p>Banda de Passagem</p></li>
+<li><p>Banda de Transição</p></li>
+<li><p>Banda de Atenuação</p></li>
+<li><p>Atenuação máxima na banda de passagem</p></li>
+<li><p>Atenuação mínima na banda de atenuação</p></li>
+</ul>
+<p><img alt="implementacao_fir" src="_images/Aula_8_Slide_4.png" /></p>
+<ul class="simple">
+<li><p>Como fazer a conversão dos “filtros” analógicos para ser representado em tempo-discreto?</p>
+<ul>
+<li><p>Será que as condições de estabilidade e causalidade são preservadas?</p></li>
+<li><p>Será que as especificações feitas em <span class="math notranslate nohighlight">\(H(j\Omega)\)</span> permanecem iguais em <span class="math notranslate nohighlight">\(H(e^{j\omega})\)</span>?</p></li>
+</ul>
+</li>
+</ul>
+<p><font size="5"><strong>Representação de um Filtro Analógico Contínuo no Tempo</strong></font></p>
+<ol class="arabic simple">
+<li><p>Função do Sistema:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[H(s) = \frac{\sum_{k=0}^{M}(s - \beta_k)}{\sum_{k=0}^{N}(s - \alpha_k)} \]</div>
+<ol class="arabic simple" start="2">
+<li><p>Resposta ao Impulso:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[h(t) = \frac{1}{2\pi j}\int_{\sigma-j\infty}^{\sigma+j\infty}H_a(s)e^{st}ds \]</div>
+<ol class="arabic simple" start="3">
+<li><p>Equação Linear Diferencial:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ \sum_{k=0}^{N}\alpha_k\frac{d^k}{dt^k}y(t) = \sum_{k=0}^{M}\beta_k\frac{d^k}{dt^k}x(t) \]</div>
+<p>Estas três representações, acima, conduzem a três métodos de projeto diferentes</p>
+<ul class="simple">
+<li><p>Aproximação das derivadas – (a partir da representação por equações diferenciais).</p></li>
+<li><p>Invariância ao impulso – (a partir da representação pela resposta ao impulso).</p></li>
+<li><p>Transformação bilinear – (a partir da resposta em frequência do sistema).</p></li>
+</ul>
+<ul class="simple">
+<li><p>Para projetar filtros IIR o importante é conhecer o projeto clássico dos filtros seletivos de frequência contínuos no tempo.</p></li>
+</ul>
+<p><img alt="metodos_iir" src="_images/metodos_iir.png" /></p>
+<p><font size="6"><strong>Projeto de filtros IIR</strong></font></p>
+<ul class="simple">
+<li><p>Função de Transferência de um filtro IIR</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[H(z) = \frac{\sum_{k=0}^{M}b_kz^{-k}}{\sum_{k=0}^{N}a_kz^{-k}} \]</div>
+<ul class="simple">
+<li><p>Considerações:</p>
+<ul>
+<li><p>O objetivo é encontrar os coeficientes <span class="math notranslate nohighlight">\(a_k\)</span> e <span class="math notranslate nohighlight">\(b_k\)</span> que satisfazem determinadas especificações de projeto.</p></li>
+<li><p>O projeto de um filtro IIR é feito, em geral, a partir de um protótipo analógico.</p></li>
+<li><p>O filtro digital é obtido a partir de uma função de transformação do domínio “s” para o “z”.</p></li>
+</ul>
+</li>
+</ul>
+<p><font size="6"><strong>Projeto de Filtros IIR por Aproximação das Derivadas</strong></font></p>
+<p><span class="math notranslate nohighlight">\(y(t)=\frac{d}{dt}x(t) \to H(s) = s\)</span></p>
+<p><span class="math notranslate nohighlight">\(Y(z) = \frac{X(z)-z^{-1}X(z)}{T}\to H(z) = \frac{1-z^{-1}}{T} \hspace{20mm} \big\{y(nT) = \frac{x(nT) - x(nT-T)}{T} = y[n] = \frac{x[n]-x[n-1]}{T} \big\}\)</span></p>
+<ul class="simple">
+<li><p>Objetivo: Aproximar a equação diferencial por uma equação de diferenças.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ \text{Primeira Derivada: } \frac{d}{dt}y(t)|_{t=nT} = \frac{1}{T}[y[n]-y[n-1]] \Leftrightarrow s=\frac{1}{T}[1-z^{-1}] \]</div>
+<div class="math notranslate nohighlight">
+\[ \text{Segunda Derivada: } \frac{d^2}{dt^2}|_{t=nT} = \frac{1}{T^2}[y[n]-2y[n-1]+y[n-2]] \]</div>
+<div class="math notranslate nohighlight">
+\[ \Longrightarrow \; s^2 = \left( \frac{1-z^{-1}}{T} \right)^2 \]</div>
+<div class="math notranslate nohighlight">
+\[ \text{k-ésima Derivada: } s^k = \left( \frac{1-z^{-1}}{T} \right)^k \text{ T é o Intervalo de Amostragem} \]</div>
+<ul class="simple">
+<li><p>Transformação de <span class="math notranslate nohighlight">\(H(s)\)</span> em <span class="math notranslate nohighlight">\(H(z)\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ \text{Faz-se a substituição: } s=\frac{1-z^{-1}}{T} \; \Rightarrow \; H(z) = H(s)|_{s=\frac{1}{T}(1-z^{-1})} \]</div>
+<ul class="simple">
+<li><p>Mapeamento do plano s no plano z:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ z = \frac{1}{1-sT} \to e^{j\omega} =  \frac{1}{1-j\Omega T} \]</div>
+<p><img alt="aula_8_slide_11" src="_images/Aula_8_Slide_11.png" /></p>
+<ul class="simple">
+<li><p>Pólos: Dentro do Círculo Unitário <span class="math notranslate nohighlight">\(\Rightarrow\)</span> Filtro estável e causal</p>
+<ul>
+<li><p>Utilização: em frequências baixas.</p></li>
+</ul>
+</li>
+<li><p>Aplicação: Filtros Passa-baixas e Passa-banda com frequências de corte e de ressonância baixas.</p></li>
+</ul>
+<p><strong>Exemplo 2: Projeto de um filtro passa-baixas pelo método de Aproximação das Derivadas</strong></p>
+<div class="math notranslate nohighlight">
+\[ H(s) = \frac{1}{(s+0.1)^2+3} \; \Rightarrow \; H(z) = \frac{1}{\left( \frac{1-z^{-1}}{T}+0.1 \right)^2+3} \]</div>
+<p><img alt="aula_8_slide_12" src="_images/Aula_8_Slide_12.png" /></p>
+<p><strong>Projeto de Filtros IIR por Invariância ao Impulso</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(h[n]\)</span> é uma cópia amostrada de <span class="math notranslate nohighlight">\(h(t)\)</span>: <span class="math notranslate nohighlight">\(\Rightarrow \; h[n]=h(nT) \quad n=0,1,2, \dots\)</span></p></li>
+<li><p>No domínio da frequência: <span class="math notranslate nohighlight">\(\Rightarrow \; H(F) = F_s \sum_{k=-\infty}^{\infty}H_a(F-kF_s)\)</span></p>
+<ul>
+<li><p>EM QUE:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(F_s = 1/T\)</span> é a frequência de amostragem.</p></li>
+<li><p><span class="math notranslate nohighlight">\(F_s\)</span> deve ser grande para evitar aliasing.</p></li>
+<li><p>Por causa do aliasing, este projeto é inadequado para os filtros passa-altas.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Expandindo o filtro analógico em frações parciais tem-se que:</p></li>
+</ul>
+<p>\begin{equation} H(s) = \sum_{k=1}^{N}\frac{c_k}{s-p_k} ; \Leftrightarrow ; h(t) = \sum_{k=1}^{N}c_ke^{p_kt}, ; t\geq0 \tag{5}\end{equation}</p>
+<p>Em que: <span class="math notranslate nohighlight">\(p_k\)</span> são os pólos de <span class="math notranslate nohighlight">\(H(s)\)</span></p>
+<ul class="simple">
+<li><p>Amostrando <span class="math notranslate nohighlight">\(h_a(t)\)</span> tem-se: <span class="math notranslate nohighlight">\(h[n] = h_a(nT) = \sum_{k=1}^{N}c_ke^{p_kTn}\)</span></p></li>
+<li><p>Calculando a transformada z de <span class="math notranslate nohighlight">\(h[n]\)</span> tem-se: <span class="math notranslate nohighlight">\(H(z) = \sum_{k=1}^{N}\frac{c_k}{1-e^{p_kT}z^{-1}}\)</span></p></li>
+<li><p>Para o projeto: os pólos de <span class="math notranslate nohighlight">\(H(z)\)</span> serão dados por:
+$<span class="math notranslate nohighlight">\( d_k=e^{p_kT} : k= 1, 2, \dots, N \)</span>$</p></li>
+<li><p>Observações:</p>
+<ul>
+<li><p>O mapeamento guia a um filtro estável pois:
+$<span class="math notranslate nohighlight">\( p_k = \sigma_k + j\Omega_k \text{ e } \sigma_k&lt;0 \; \Rightarrow \; |d_k| = e^{\sigma_kT}&lt;1 \; \Rightarrow \; \text{filtro estável} \)</span>$</p></li>
+<li><p>Não é necessário determinar <span class="math notranslate nohighlight">\(h_a(t)\)</span></p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Roteiro de Projeto</strong></p>
+<ol class="arabic simple">
+<li><p>Determina-se o protótipo analógico <span class="math notranslate nohighlight">\(H_a(s)\)</span> de ordem <span class="math notranslate nohighlight">\(N\)</span>.</p></li>
+<li><p>Calcula-se os pólos <span class="math notranslate nohighlight">\(p_k\)</span> e os coeficientes <span class="math notranslate nohighlight">\(c_k\)</span> da expansão em frações parciais do filtro.</p></li>
+<li><p>Calcula-se os pólos <span class="math notranslate nohighlight">\(d_k\)</span> do filtro digital, tal que:
+$<span class="math notranslate nohighlight">\( d_k = e^{p_kT} : k=1,2,\dots,N \)</span>$</p></li>
+<li><p>Determina-se o Filtro Digital tal que:
+$<span class="math notranslate nohighlight">\( H(z) = \sum_{k=1}^{N}\frac{c_k}{1-e^{p_kT}z^{-1}} \)</span>$</p></li>
+</ol>
+<section id="exemplo-projeto-de-um-filtro-passa-banda-pelo-metodo-de-invariancia-ao-impulso">
+<h2>Exemplo:  Projeto de um filtro passa-banda pelo método de Invariância ao Impulso.<a class="headerlink" href="#exemplo-projeto-de-um-filtro-passa-banda-pelo-metodo-de-invariancia-ao-impulso" title="Permalink to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[ H_a(s) = \frac{s+0.1}{(s+0.1)^2+9} \; \Rightarrow \; H_a(s) = \frac{1/2}{s+0.1-j3} + \frac{1/2}{s+0.1+j3} \]</div>
+<ul class="simple">
+<li><p>Os pólos do Filtro Digital serão dados por: <span class="math notranslate nohighlight">\(e^{-0.1T}e^{\pm j3T}\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ H(z) = \frac{1-(e^{-0.1T}\cos(3T))z^{-1}}{1-(2e^{-0.1T}\cos(3T))z^{-1} + e^{-0.2T}z^{-2}} \]</div>
+<p><img alt="aula_8_slide_16" src="_images/Aula_8_Slide_16.png" /></p>
+<p><strong>Projeto de Filtros IIR por Transformação Bilinear</strong></p>
+<ul class="simple">
+<li><p>Vantagem: elimina o problema de aliasing.</p></li>
+<li><p>Utilização: todos os três tipos de filtros.</p></li>
+<li><p>Método: é baseado na Regra de Integração do Trapézio.</p></li>
+<li><p>Problema: apresenta distorção no eixo das frequências.</p></li>
+<li><p>Desenvolvimento</p>
+<ul>
+<li><p>Seja um sistema de primeira ordem com função de transferência dada abaixo:
+$<span class="math notranslate nohighlight">\( H_a(s) = \frac{Y(s)}{X(s)} = \frac{b}{s+a} \; \Rightarrow \; \frac{d}{dt}y(t) + ay(t) = bx(t) \)</span>$</p></li>
+</ul>
+</li>
+<li><p>A integral da derivada de <span class="math notranslate nohighlight">\(y(t)\)</span> é dada por: <span class="math notranslate nohighlight">\(y(t) = \int_{t_0}^{t} y'(t)dt + y(t_0)\)</span></p></li>
+<li><p>Admitindo <span class="math notranslate nohighlight">\(t = nT\)</span> e <span class="math notranslate nohighlight">\(t_0 = (n-1)T\)</span>. Então, pela regra do Trapézio tem-se:
+$<span class="math notranslate nohighlight">\( y[n] = \frac{T}{2}[y'[n]+y'[n-1]]+y[n-1] \)</span>$</p></li>
+<li><p>Substituindo a equação das derivadas para <span class="math notranslate nohighlight">\(t = nT\)</span> na equação anterior tem-se que:
+$<span class="math notranslate nohighlight">\( \left( 1+\frac{aT}{2} \right)y[n] - \left( 1-\frac{aT}{2} \right)y[n-1] = \frac{bT}{2}[x[n]+x[n-1]] \)</span>$</p></li>
+<li><p>Calculando a Transformada z:
+$<span class="math notranslate nohighlight">\( H(z) = \frac{Y(z)}{X(z)} = \frac{b}{\frac{2}{T}\left( \frac{1-z^{-1}}{1+z^{-1}} \right)+a} \)</span>$</p></li>
+<li><p>Equivalência dos filtros:
+$<span class="math notranslate nohighlight">\( H_a(s) = \frac{b}{s+a} \; \Rightarrow \; H(z) = \frac{b}{\frac{2}{T}\left( \frac{1-z^{-1}}{1+z^{-1}} \right)+a} \)</span>$</p></li>
+<li><p>O mapeamento de s no plano z será feito por:
+$<span class="math notranslate nohighlight">\( s= \frac{2}{T}\left( \frac{1-z^{-1}}{1+z^{-1}} \right) \)</span>$</p></li>
+<li><p>Sejam: <span class="math notranslate nohighlight">\(z = re^{jw}\)</span> e <span class="math notranslate nohighlight">\(s = \sigma + j\Omega\)</span>. Substituindo na equação anterior tem-se:</p></li>
+</ul>
+<section id="s-frac-2-t-left-frac-r-2-1-1-r-2-2r-cos-w-j-frac-2r-sin-w-1-r-2-2r-cos-w-right-text-se-r-1-rightarrow-sigma-0-text-polos-dentro-do-circulo-unitario">
+<h3><span class="math notranslate nohighlight">\( s = \frac{2}{T} \left( \frac{r^2-1}{1+r^2+2r\cos(w)}+j\frac{2r\sin(w)}{1+r^2+2r\cos(w)} \right) \text{ se } r&lt;1 \Rightarrow \sigma&lt;0 \text{ Pólos dentro do círculo unitário} \)</span><a class="headerlink" href="#s-frac-2-t-left-frac-r-2-1-1-r-2-2r-cos-w-j-frac-2r-sin-w-1-r-2-2r-cos-w-right-text-se-r-1-rightarrow-sigma-0-text-polos-dentro-do-circulo-unitario" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Seja <span class="math notranslate nohighlight">\(r = 1\)</span> então:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ \Omega = \frac{2}{T}\tan\left( \frac{w}{2} \right) \]</div>
+<p><img alt="metodos_iir" src="_images/Aula_8_Slide_19.png" /></p>
+<p>compensação - pre-warping</p>
+<p>compensa a deformação bilinear dando mais ganho nas frequencias mais altas ou perto da frequência de corte</p>
+<p><strong>Projeto de um filtro passa-banda pelo método da transformação bilinear.</strong></p>
+<div class="math notranslate nohighlight">
+\[ H_a(s) = \frac{s+0.1}{(s+0.1)^2+16} \; \Rightarrow \; \text{ para } T=0.5 \; \Rightarrow \; s = 4\frac{1-z^{-1}}{1+z^{-1}} \]</div>
+<ul class="simple">
+<li><p>Portanto o filtro digital será:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ H(z) = \frac{0.128+0.006z^{-1}-0.122z^{-2}}{1+0.0006z^{-1}+0.975z^{-2}} \]</div>
+<p><strong>Famílias de Filtros Analógicos</strong></p>
+<ul class="simple">
+<li><p>Técnica de Projeto de Filtros IIR consiste:</p>
+<ul>
+<li><p>Obtenção de um filtro analógico que obedece a determinadas condições de Projeto.</p></li>
+<li><p>Conversão de <span class="math notranslate nohighlight">\(H(s)\)</span> em <span class="math notranslate nohighlight">\(H(z)\)</span>.</p></li>
+</ul>
+</li>
+<li><p>Família de Filtros Analógicos Típicos:</p>
+<ul>
+<li><p>Filtro de Butterworth,</p></li>
+<li><p>Filtro de Chebyshev: Tipo I e Tipo II,</p></li>
+<li><p>Filtro Elíptico (ou de Cauer),</p></li>
+<li><p>Filtro de Bessel (Fase Linear).</p>
+<ul>
+<li><p>Não utilizado <span class="math notranslate nohighlight">\(\Rightarrow\)</span> Para fase linear utiliza-se filtros FIR.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Revisão no projeto clássico de filtros</p></li>
+</ul>
+<p><strong>Filtro de Butterworth</strong></p>
+<ul class="simple">
+<li><p>Apresenta uma resposta de amplitude maximamente plana na faixa de passagem. Isto é,</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\( |H(j\Omega)|^2 = \frac{1}{1+\left( \frac{-s^2}{\Omega_{c}^{2}} \right)^N} = \frac{1}{1+\left( \frac{\Omega}{\Omega_{c}^{2}} \right)^{2N}} \)</span></p>
+<p>onde: <span class="math notranslate nohighlight">\(\Omega_c\)</span> é a frequência de corte (3dB). <span class="math notranslate nohighlight">\(N\)</span> é a ordem do filtro.</p>
+<ul class="simple">
+<li><p>Os pólos de <span class="math notranslate nohighlight">\(H(j\Omega)\)</span> são dados por:
+<span class="math notranslate nohighlight">\( -\frac{s^2}{\Omega_{c}^{2}} = (-1)^{\frac{1}{N}} = e^{j(2k+1)\pi/N} \; \longrightarrow \; \begin{cases} p_k=\Omega_ce^{\frac{j\pi}{2}e^{j(2k+1)\pi/2N}} \\ k=0,1,\dots,N-1  \end{cases} \)</span></p></li>
+<li><p>Estes pólos estão localizados no semi plano esquerdo do plano s e em pontos regularmente espaçados  de um círculo de raio <span class="math notranslate nohighlight">\(\Omega_c\)</span>.</p></li>
+</ul>
+<p><img alt="aula_8_slide_23" src="_images/Aula_8_Slide_23.png" /></p>
+<ul class="simple">
+<li><p>Na banda de transição: a taxa de atenuação é igual a <span class="math notranslate nohighlight">\(20N\)</span> dB/década.</p></li>
+<li><p>Determinando <span class="math notranslate nohighlight">\(N\)</span> e <span class="math notranslate nohighlight">\(\Omega_c\)</span> o filtro está definido.</p></li>
+<li><p>A ordem do filtro pode ser determinada por:
+\begin{equation} 1+\left( \frac{\Omega_s}{\Omega_c} \right)^{2N} = \delta^2 \tag{8}\end{equation}</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(\delta\)</span>: atenuação mínima na banda de atenuação.
+<span class="math notranslate nohighlight">\(\Omega_s\)</span>: frequência de início da banda de atenuação</p>
+<p><strong>Exemplo</strong></p>
+<p>Sendo dados: <span class="math notranslate nohighlight">\(\Omega_c = 1000\pi\)</span>, <span class="math notranslate nohighlight">\(\Omega_s = 2000\pi\)</span> e <span class="math notranslate nohighlight">\(\delta_{dB} = 40\)</span> dB. Determine a ordem do filtro de Butterworth e os seus pólos.</p>
+<ul class="simple">
+<li><p>Cálculo da ordem do Filtro:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ \text{sabe-se que: } 1+ \left( \frac{\Omega_s}{\Omega_c} \right)^{2N} = \delta^2 \text{ e que: } \delta=10^{\frac{40}{20}}=100\]</div>
+<div class="math notranslate nohighlight">
+\[ 1+ \left( \frac{2000\pi}{1000\pi} \right)^{2N}=100^2 \; \Rightarrow \; N = \frac{\log(10^4-1)}{2log(2)}=6.64 \; \Rightarrow \; N=7 \]</div>
+<ul class="simple">
+<li><p>Cálculo dos Pólos:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split} \begin{cases} p_k = \Omega_c e^{j\frac{\pi}{2}}e^{j(2k+1)\pi/2N}=1000\pi\cdot e^{j\left(\frac{\pi}{2}+\frac{2k+1}{14}\pi\right)} \\ k=0,1,\dots,6 \end{cases} \end{split}\]</div>
+<p><strong>Filtro de Chebyshev</strong></p>
+<ul class="simple">
+<li><p>Apresenta maior taxa de atenuação na banda de transição do que as outras famílias de filtros.</p></li>
+<li><p>Tem-se dois tipos: I e II</p>
+<ul>
+<li><p>TIPO I: Apresenta comportamento oscilatório na banda de passagem (equiripple) e monotônico na banda de atenuação.</p></li>
+<li><p>TIPO II: Comportamento monotônico na banda de passagem e oscilatório na banda de atenuação.</p></li>
+</ul>
+</li>
+<li><p>Resposta de Amplitudes: Tipo I</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ |H(j\Omega)|^2 = \frac{1}{1+\varepsilon^2C_{N}^{2}(\Omega/\Omega_p)} \]</div>
+<p><span class="math notranslate nohighlight">\(\varepsilon\)</span>: parâmetro relacionado com a ondulação (ripple).
+<span class="math notranslate nohighlight">\(C_N(x): \text{Polinômio de Chebyshev.}\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{split} \text{O polinômio de Chebyshev de Ordem N} \; \Rightarrow \; C_N(x) = \begin{cases} \cos(N\cos^{-1}(x)), &amp;|x|\leq1 \\ \cosh(N\cosh^{-1}(x)), &amp;|x|&gt;1 \end{cases} \end{split}\]</div>
+<ul class="simple">
+<li><p>Fórmula de Recursão para o cálculo de <span class="math notranslate nohighlight">\(C_N(x)\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ C_{N+1}(x) = 2xC_N(x) - C_{N-1}(x) \]</div>
+<p>em que: <span class="math notranslate nohighlight">\(C_0(x)=1\)</span> e <span class="math notranslate nohighlight">\(C_1(x)=x\)</span>.</p>
+<p><span class="math notranslate nohighlight">\(C_n(x)\)</span>: Varia entre <span class="math notranslate nohighlight">\(\pm1\)</span> para <span class="math notranslate nohighlight">\(|x| \leq 1\)</span>. Aumenta monotonicamente para <span class="math notranslate nohighlight">\(|x| &gt; 1\)</span>.</p>
+<ul class="simple">
+<li><p>Resposta de Amplitudes para o filtro de Chebyshev: Tipo I</p></li>
+</ul>
+<p><img alt="aula_8_slide_26" src="_images/Aula_8_Slide_26.png" /></p>
+<ul>
+<li><p>Localização dos Pólos</p>
+<ul class="simple">
+<li><p>Os pólos do filtro de Chebyshev (tipo I) estão localizados em uma elipse cujos eixos maior (<span class="math notranslate nohighlight">\(r_1\)</span>) e menor (<span class="math notranslate nohighlight">\(r_2\)</span>) são dados por:
+<span class="math notranslate nohighlight">\( r_1 = \frac{\Omega_p}{2}\left( \beta + \frac{1}{\beta} \right) \text{ e } r_2 = \frac{\Omega_p}{2}\left( \beta - \frac{1}{\beta} \right) \)</span></p></li>
+<li><p>O parâmetro <span class="math notranslate nohighlight">\(\beta\)</span> depende de <span class="math notranslate nohighlight">\(\varepsilon\)</span>, e é dado por:
+<span class="math notranslate nohighlight">\( \beta = \left[ \sqrt{1+\varepsilon^{-2}} + \frac{1}{\varepsilon} \right]^{1/N} \)</span></p></li>
+<li><p>Cálculo dos pólos:
+<span class="math notranslate nohighlight">\( p_k = r_2\cos(\phi_k) + jr_1\sin(\phi_k) \)</span></p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\( \text{em que: } \phi_k = \frac{\pi}{2}+\frac{2k+1}{2N}\pi, \quad k=0,1,\dots,N-1 \)</span></p>
+</li>
+<li><p>Para o projeto dos filtros de Chebyshev são requeridos 4 parâmetros:</p>
+<ul class="simple">
+<li><p>Freqüências da banda de passagem e de atenuação: <span class="math notranslate nohighlight">\(\Omega_p\)</span> e <span class="math notranslate nohighlight">\(\Omega_s\)</span>;</p></li>
+<li><p>Ondulação (Ripple) (<span class="math notranslate nohighlight">\(\delta_1\)</span>)</p></li>
+<li><p>Atenuação mínima na banda de atenuação.</p></li>
+<li><p>O parâmetro ε é calculado através da ondulação (ripple):</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\( \varepsilon^2 + 1 = \delta_1^2 \)</span></p>
+<ul class="simple">
+<li><p>A ordem do filtro é determinada através de:</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\( N = \frac{\log\left\{\left[\sqrt{\delta_2^2-1}+\sqrt{\delta_2^2+\varepsilon^2+1}\right]/2\varepsilon \right\}}{\log\left[ \frac{\Omega_s}{\Omega_p}+ \sqrt{\left( \frac{\Omega_s}{\Omega_p} \right)^2-1} \right]} \)</span></p>
+</li>
+<li><p>Com os valores de <span class="math notranslate nohighlight">\(N\)</span> e <span class="math notranslate nohighlight">\(\varepsilon\)</span>, os pólos são determinados pelas equações anteriores.</p></li>
+</ul>
+<p><strong>Exemplo</strong></p>
+<p>Sendo dados: <span class="math notranslate nohighlight">\(\Omega_p = 1000\pi\)</span>, <span class="math notranslate nohighlight">\(\Omega_s = 2000\pi\)</span>, <span class="math notranslate nohighlight">\(\delta_1 = 1 dB\)</span> e <span class="math notranslate nohighlight">\(\delta_2 = 40dB\)</span>. Determine a ordem do filtro de Chebyshev e os seus pólos.</p>
+<ul class="simple">
+<li><p>Cálculo de <span class="math notranslate nohighlight">\(\varepsilon\)</span>:
+$<span class="math notranslate nohighlight">\( \varepsilon^2 + 1 = (10^{1/20})^2 \; \Rightarrow \; \varepsilon=0.5080 \)</span>$</p></li>
+<li><p>Cálculo da ordem do Filtro:
+$<span class="math notranslate nohighlight">\( 20\log(\delta_2) = 40 \; \Rightarrow \; \delta_2=100 \quad N=\frac{\log(196,54)}{\log(2+\sqrt{3})}=4 \)</span>$</p></li>
+<li><p>Cálculo dos Pólos:
+$<span class="math notranslate nohighlight">\(
+\begin{split}
+\beta &amp;= 1.429 \\
+r_1 &amp;= 1.06\Omega_p \\
+r_2 &amp;= 0.365\Omega_p
+\end{split} \; \Rightarrow \;
+\begin{cases}
+p_{0,2} = -0.1397\Omega_p \pm j 0.979\Omega_p \\
+p_{1,3} = -0.337\Omega_p \pm j 0.4056\Omega_p
+\end{cases}
+\)</span>$</p></li>
+</ul>
+<p><strong>Filtro Elíptico</strong></p>
+<ul class="simple">
+<li><p>Apresenta comportamento oscilatório (equiripple) tanto na banda de passagem quanto na banda de atenuação.</p></li>
+<li><p>A resposta em amplitudes é caracterizada pela equação:
+\begin{equation} |H(j\Omega)|^2 = \frac{1}{1+\varepsilon^2U_N^2\left(\frac{\Omega}{\Omega_p}\right)} \tag{17}\end{equation}</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(\varepsilon\)</span>: Relacionado com a ondulação (ripple).
+<span class="math notranslate nohighlight">\(U_N(x)\)</span>: Função Elíptica Jacobiana (Tabelada em Zverev).
+<strong>Vantagens:</strong> Fornece ordem menor do que os outros filtros e também banda de transição menor.</p>
+<p><img alt="aula_8_slide_30" src="_images/Aula_8_Slide_30.png" /></p>
+<p><strong>Filtro de Bessel</strong></p>
+<ul class="simple">
+<li><p>Apresenta fase linear dentro da banda passante. Na conversão para o digital esta característica é perdida, por isso não é utilizado. Em seu lugar utiliza-se filtros FIR.</p></li>
+<li><p>São caracterizados pela seguinte função de transferência:</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\( H(s) = \frac{1}{B_N(s)} \)</span></p>
+<p>Em que: <span class="math notranslate nohighlight">\(B_N(s)\)</span> é o polinômio de Bessel de ordem <span class="math notranslate nohighlight">\(N\)</span>.</p>
+<p><span class="math notranslate nohighlight">\( B_N(s) = \sum_{k=0}^{N}a_ks^k \text{ em que: }a_k=\frac{(2N-k)!}{2^{N-k}k!(N-k)!} \)</span></p>
+<p>Equação de Recursão:</p>
+<p><span class="math notranslate nohighlight">\(\begin{split}B_N(s) = (2N-1)B_{N-1}(s) + s^2B_{N-2}(s) \\ \text{ em que: } B_0(s)=1 \text{ e } B_1(s) = s+1  \end{split} \)</span></p>
+<p><strong>Exemplo de Projeto de Filtros Digitais</strong></p>
+<ul class="simple">
+<li><p>Projeto de um filtro digital passa-baixas com as seguintes especificações:</p></li>
+<li><p>Família de Butterworth,</p></li>
+<li><p>Banda de passagem: <span class="math notranslate nohighlight">\(0\)</span> - <span class="math notranslate nohighlight">\(1 kHz\)</span> e atenuação máxima <span class="math notranslate nohighlight">\(1 dB\)</span>.</p></li>
+<li><p>Banda de atenuação: A partir de <span class="math notranslate nohighlight">\(3 kHz\)</span> e atenuação mínima de <span class="math notranslate nohighlight">\(10 dB\)</span>.</p></li>
+<li><p>Frequência de amostragem: <span class="math notranslate nohighlight">\(10 kHz\)</span></p></li>
+<li><p>Projeto por equação de diferenças.</p></li>
+<li><p>Projeto por transformação bilinear com pre-warping.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+\begin{cases}
+\Omega_p = 2\pi 1000 \text{ e } R_p=1dB \\
+\Omega_s = 2\pi 3000 \text{ e } R_s=10dB \\
+f_a = 10kHz
+\end{cases}
+\end{split}\]</div>
+<p><strong>Equação de Diferenças</strong></p>
+<div class="math notranslate nohighlight">
+\[ H(z) = \frac{0.2568}{1-1.0742z^{-1}+0.3309z^{-2}} \]</div>
+<p><img alt="aula_8_slide_33" src="_images/Aula_8_Slide_33.png" /></p>
+<p><strong>Transformação Bilinear</strong></p>
+<div class="math notranslate nohighlight">
+\[ H(z) = \frac{0.22918 + 0.45837 z^{-1} + 0.22918z^{-2}}{1-0.26751z^{-1}+0.18426z^{-2}} \]</div>
+<p><img alt="aula_8_slide_34" src="_images/Aula_8_Slide_34.png" /></p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Aula%2007%20-%20Transformada%20Discreta%20de%20Fourier.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Aula 7 - Transformada Discreta de Fourier</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Aula%2009%20-%20Filtros%20FIR%20-%20Parte%201.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Aula 9 - Filtros FIR - Parte 1</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exemplo-projeto-de-um-filtro-passa-banda-pelo-metodo-de-invariancia-ao-impulso">Exemplo:  Projeto de um filtro passa-banda pelo método de Invariância ao Impulso.</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#s-frac-2-t-left-frac-r-2-1-1-r-2-2r-cos-w-j-frac-2r-sin-w-1-r-2-2r-cos-w-right-text-se-r-1-rightarrow-sigma-0-text-polos-dentro-do-circulo-unitario"><span class="math notranslate nohighlight">\( s = \frac{2}{T} \left( \frac{r^2-1}{1+r^2+2r\cos(w)}+j\frac{2r\sin(w)}{1+r^2+2r\cos(w)} \right) \text{ se } r&lt;1 \Rightarrow \sigma&lt;0 \text{ Pólos dentro do círculo unitário} \)</span></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Carlos Dias Maciel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

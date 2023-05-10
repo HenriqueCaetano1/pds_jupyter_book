@@ -1,0 +1,615 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Aula 5 - Amostragem &#8212; Notas de Aula - Processamento Digital de Sinais</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Aula 05 - Amostragem';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Aula 6 - Transformada Z" href="Aula%2006%20-%20Transformada%20Z.html" />
+    <link rel="prev" title="Aula 4 - Transformada de Fourier em Tempo Discreto" href="Aula%2004%20-%20Transformada%20de%20Fourier%20em%20Tempo%20Discreto.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo_lps.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo_lps.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Notas de Aula - Processamento Digital de Sinais
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Aula%2001%20-%20Introdu%C3%A7%C3%A3o.html">Aula 1 - Introdução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2002%20-%20Sinais%20em%20Tempo%20Discreto.html">Aula 2 - Sinais em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2003%20-%20Sistemas%20em%20tempos%20discreto.html">Aula 3 - Sistemas em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2004%20-%20Transformada%20de%20Fourier%20em%20Tempo%20Discreto.html">Aula 4 - Transformada de Fourier em Tempo Discreto</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Aula 5 - Amostragem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2006%20-%20Transformada%20Z.html">Aula 6 - Transformada Z</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2007%20-%20Transformada%20Discreta%20de%20Fourier.html">Aula 7 - Transformada Discreta de Fourier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2008%20-%20Filtros%20IIR.html">Aula 8 - Filtros IIR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2009%20-%20Filtros%20FIR%20-%20Parte%201.html">Aula 9 - Filtros FIR - Parte 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2010%20-%20Filtros%20FIR%20-%20Parte%202.html">Aula 10 - Filtros FIR - Parte 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2011%20-%20Filtros%20FIR%20-%20Parte%203.html">Aula 11 - Filtros FIR - Parte 3</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FAula 05 - Amostragem.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Aula 05 - Amostragem.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Aula 5 - Amostragem</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="aula-5-amostragem">
+<h1>Aula 5 - Amostragem<a class="headerlink" href="#aula-5-amostragem" title="Permalink to this heading">#</a></h1>
+<p>Versão 2023</p>
+<p>Essas notas de aula podem ser compartilhadas nos termos da lincença Creative Commons CC BY-NC-ND 4.0, com propósitos exclusivamente educacionais.</p>
+<p>Attribution-NonCommercial-NoDerivatives 4.0 International</p>
+<p><font size="6"><strong>Introdução</strong></font></p>
+<ul class="simple">
+<li><p>A teoria da Amostragem é a base matemática para se obter um sinal <span class="math notranslate nohighlight">\(x(n)\)</span> discreto no tempo a partir de um sinal <span class="math notranslate nohighlight">\(x(t)\)</span> contínuo no tempo.</p></li>
+<li><p>A obtenção de uma sequência de amostras <span class="math notranslate nohighlight">\(x(n)\)</span> a partir de um sinal <span class="math notranslate nohighlight">\(x(t)\)</span> contínuo no tempo pode ser representada pela seguinte relação:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ x(n) = x(t)|_{t=nT_a} = x(nT_a) \]</div>
+<ul class="simple">
+<li><p>Em que:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(n\)</span> um número inteiro,</p></li>
+<li><p><span class="math notranslate nohighlight">\(T_a\)</span> é o período de amostragem do sinal,</p></li>
+<li><p><span class="math notranslate nohighlight">\(F_a = 1/T_a\)</span> é a freqüência de amostragem</p></li>
+</ul>
+</li>
+<li><p>Na prática a operação de amostragem é executada por um conversor AD (analógico-digital) que inclui também a quantização das amplitudes das amostras.</p></li>
+</ul>
+<p><font size="5"><strong>O Problema da Amostragem</strong></font></p>
+<p><img alt="aula_4_slide_17" src="_images/Aula_5_a.png" /></p>
+<p>Observa-se que para um conjunto de amostras <span class="math notranslate nohighlight">\(x[n]\)</span>, existem inúmeras funções <span class="math notranslate nohighlight">\(x_i(t)\)</span> que passa por esses pontos, <span class="math notranslate nohighlight">\(x_1(nT) = x_2(nT)\)</span></p>
+<p>Sempre é possível amostrar funções que atendam as condições de Dirichlet, <span class="math notranslate nohighlight">\(x(t) \to x(nT) \to x[n]\)</span></p>
+<p>Porém, a garantia de se reconstruir <span class="math notranslate nohighlight">\(x(t)\)</span> a partir de suas amostras, é necessária restrições adicionais sobre o sinal contínuo <span class="math notranslate nohighlight">\(x(t)\)</span></p>
+<p><strong>As condições de Dirichlet são:</strong></p>
+<ol class="arabic simple">
+<li><p>O sinal deve ser absolutamente integrável, <span class="math notranslate nohighlight">\(\sum_{-\infty}^{\infty} |x(t)|dt &lt; \infty\)</span></p></li>
+<li><p>Em um intervalo qualquer sinal, não deve existir infinitos pontos de máximo e mínimo</p></li>
+<li><p>Em um intervalo finito qualquer do sinal, não devem existir infinitas descontinuidades</p></li>
+</ol>
+<p><font size="5"><strong>Representação Matemática</strong></font></p>
+<p><img alt="aula_5_slide_3" src="_images/Aula_5_Slide_3.png" /></p>
+<ul class="simple">
+<li><p>O sinal <span class="math notranslate nohighlight">\(s(t)\)</span> é um trem de impulsos periódicos tal que:
+\begin{equation} s(t) = \sum_{n=-\infty}^{\infty}\delta(t-nT_a) \tag{2}\end{equation}</p></li>
+<li><p>Como o sinal amostrado é o produto de <span class="math notranslate nohighlight">\(s(t)\)</span> por <span class="math notranslate nohighlight">\(x(t)\)</span>, então:
+\begin{equation} x_a(t) = x(nT_a) = x(t)s(t) = \sum_{n=-\infty}^{\infty}x(t)\delta(t-nT_a) \tag{3} \end{equation}</p></li>
+</ul>
+<ul class="simple">
+<li><p>Calculando a transformada de Fourier tem-se:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ \Longrightarrow S(\Omega) = \frac{2\pi}{T_a}\sum_{k=-\infty}^{\infty}\delta(\Omega-k\Omega_a), \text{em que: } \Omega_a=\frac{2\pi}{T_a}\]</div>
+<div class="math notranslate nohighlight">
+\[ \Longrightarrow X_a(\Omega) = \frac{1}{2\pi} X(\Omega)\ast S(\Omega) \text{ (Teor. da Convolução)}\]</div>
+<div class="math notranslate nohighlight">
+\[ \Longrightarrow X_a(\Omega) = \frac{1}{T_a}\sum_{k=-\infty}^{\infty}X(\Omega-k\Omega_a)\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(X_a(\Omega)\)</span> consiste de cópias regularmente espaçadas de <span class="math notranslate nohighlight">\(X(\Omega)\)</span></p></li>
+<li><p>O espaçamento é dado por múltiplos inteiros de <span class="math notranslate nohighlight">\(\Omega_a\)</span>.</p></li>
+<li><p>Estas cópias são superpostas como mostra a figura abaixo:</p></li>
+</ul>
+<p><img alt="aula_5_slide_5" src="_images/Aula_5_Slide_5.png" /></p>
+<p><img alt="aula_5_slide_6" src="_images/Aula_5_Slide_6.png" /></p>
+<ul class="simple">
+<li><p>Observe que para não haver superposição de Espectros:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ \Omega_a - \Omega_M &gt; \Omega_M \; \Longrightarrow \; \Omega_a &gt; 2\Omega_M \]</div>
+<ul class="simple">
+<li><p>Se a condição acima é satisfeita as réplicas de <span class="math notranslate nohighlight">\(X(\Omega)\)</span> não irão se superporem.</p></li>
+<li><p>Em cada período tem-se uma réplica exata de <span class="math notranslate nohighlight">\(X(\Omega)\)</span>.</p></li>
+<li><p>Portanto o sinal <span class="math notranslate nohighlight">\(x(t)\)</span> pode ser recuperado a partir de <span class="math notranslate nohighlight">\(x_a(t)\)</span> através de um filtro passa-baixas com corte em <span class="math notranslate nohighlight">\(\Omega_c = \Omega_M\)</span></p></li>
+</ul>
+<p><font size="5"><strong>Recuperação de x(t)</strong></font></p>
+<p><img alt="aula_5_slide_7" src="_images/Aula_5_Slide_7.png" /></p>
+<ul class="simple">
+<li><p>Se a condição <span class="math notranslate nohighlight">\(\Omega_a &gt; 2\Omega_M\)</span> não é satisfeita, as réplicas de <span class="math notranslate nohighlight">\(X(\Omega)\)</span> se sobrepõem, modificando o espectro do sinal original.</p></li>
+<li><p>O sinal na banda básica aparecerá distorcido e não poderá ser recuperado. Este efeito é conhecido como ‘aliasing’.</p></li>
+</ul>
+<p><font size="5"><strong>Teorema da Amostragem</strong></font></p>
+<ul class="simple">
+<li><p>A discussão anterior forma a base para se enunciar o teorema da amostragem.</p></li>
+</ul>
+<p>Um sinal <span class="math notranslate nohighlight">\(x(t)\)</span>, contínuo no tempo e limitado em banda tal que a frequência máxima de seu espectro seja <span class="math notranslate nohighlight">\(\Omega_M\)</span>, isto é:</p>
+<div class="math notranslate nohighlight">
+\[X(\Omega) = 0, \; |\Omega| &gt; |\Omega_M|\]</div>
+<p>pode ser recuperado unicamente a partir de suas amostras <span class="math notranslate nohighlight">\(x(n) = x(nT_a)\)</span>, tomadas em intervalos regularmente espaçados tais que:</p>
+<div class="math notranslate nohighlight">
+\[\Omega_a = \frac{2\pi}{T_a} &gt; 2\Omega_M \text{ ou } F_a &gt; 2F_M \]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\Omega_M\)</span> ou <span class="math notranslate nohighlight">\(F_M\)</span> <span class="math notranslate nohighlight">\(\Longrightarrow\)</span> Freqüência de Nyquist.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Omega_a\)</span> ou <span class="math notranslate nohighlight">\(F_a\)</span> <span class="math notranslate nohighlight">\(\Longrightarrow\)</span> Taxa de Nyquist.</p></li>
+</ul>
+<p><font size="5"><strong>Exemplos de Osciloscópios</strong></font></p>
+<p><img alt="osciloscopio" src="_images/OsciloscopiosTektronics.png" /></p>
+<ol class="arabic simple">
+<li><p>Osciloscópio Digital TBS1102B 2 Canais 100MHz Tektronix
+Osciloscópio Digital Tektronix de 2 Canais 100 MHz, excelente custo benefício, leve e compacto, display colorido com 7 polegadas, 2 canais, banda de 100MHz, Taxa de amostragem 2GS/s simultâneo em todos os canais.</p></li>
+<li><p>Osciloscópio digital de 200 MHz, 2 canais, taxa de amostragem mínima 2GS/s por canal simultaneamente para medidas em tempo real, 02 digitalizadores independentes. Tela de cristal líquido WVGA colorida de 7 polegadas. Dois canais de frequencímetro de 6 dígitos.</p></li>
+</ol>
+<p><font size="5"><strong>Exemplos de Aliasing</strong></font></p>
+<p><img alt="aula_5_b" src="_images/Aula_5_b.png" /></p>
+<p>Sem Aliasing (figura da esquerda)</p>
+<p>Com Aliasing (figura da direita)</p>
+<p><font size="5"><strong>Diagrama em Blocos</strong></font></p>
+<p><img alt="aula_1_slide_3" src="_images/Aula_1_Slide_3.png" /></p>
+<p><font size="5"><strong>Interpretação da reconstrução no tempo</strong></font></p>
+<p><img alt="aula_5_c1" src="_images/Aula_5_c1.png" /></p>
+<p><img alt="aula_5_c2" src="_images/Aula_5_c2.png" /></p>
+<p><img alt="aula_5_c3" src="_images/Aula_5_c3.png" /></p>
+<p><font size="5"><strong>Exemplo de amostragem de uma senoide não respeitando Nyquist</strong></font></p>
+<p>Seja <span class="math notranslate nohighlight">\(x(t) = cos(500\pi t)\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Determine a sequência <span class="math notranslate nohighlight">\(x[n]\)</span> para uma frequência de amostragem igual a 1000 Hz;</p></li>
+<li><p>Determine a sequência <span class="math notranslate nohighlight">\(x[n]\)</span> para uma frequência de amostragem igual a 200 Hz; (resp: <span class="math notranslate nohighlight">\(cos(0.5 \pi n)\)</span>);</p></li>
+<li><p>A partir de <span class="math notranslate nohighlight">\(x[n]\)</span> do item anterior determine o novo sinal no domínio do tempo contínuo <span class="math notranslate nohighlight">\(x'(t)\)</span></p></li>
+</ol>
+<p><strong>Solução</strong></p>
+<p>De forma geral tem-se, <span class="math notranslate nohighlight">\(x[n] = x(nT)\)</span>. Do exemplo proposto, tem-se <span class="math notranslate nohighlight">\(500\pi = 2\pi f_o\)</span>, <span class="math notranslate nohighlight">\(f_o = 250\)</span> Hz.</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(T=\frac{1}{1000}\)</span> então <span class="math notranslate nohighlight">\(x[n] = \cos(500\pi n \frac{1}{1000}) = \cos(\frac{n\pi}{2}) \)</span>. Como <span class="math notranslate nohighlight">\(F_a &gt; 2f_o\)</span> essa amostragem atende o critério de Nyquist;</p></li>
+<li><p><span class="math notranslate nohighlight">\(T=\frac{1}{200}\)</span>. Então <span class="math notranslate nohighlight">\(x[n] = \cos(500\pi n \frac{1}{200}) = \cos(\frac{5n\pi}{2}) \)</span>. Neste caso não atende o critério de Nyquist;</p></li>
+<li><p>Quem é <span class="math notranslate nohighlight">\(x'(t)\)</span> tal que <span class="math notranslate nohighlight">\(x[n] = \cos(\frac{5n\pi}{2}) \to x'(t)\)</span></p></li>
+</ol>
+<p>recordando <span class="math notranslate nohighlight">\(x_a(t) = x(t)s(t)\)</span> então <span class="math notranslate nohighlight">\(X_a(\Omega) = X(\Omega)*S(\Omega)\)</span> onde:</p>
+<p><span class="math notranslate nohighlight">\(s(t) = \sum_{n=-\infty}^{\infty} \delta(t - nT)\)</span> então <span class="math notranslate nohighlight">\(S(\Omega) = TF\{s(t)\} = \frac{1}{2\pi}\sum_{k=-\infty}^{\infty} \Phi(\Omega -k\Omega_a)\)</span></p>
+<p>Observa-se que <span class="math notranslate nohighlight">\(S(\Omega)\)</span> é um trem de impulsos em frequência e <span class="math notranslate nohighlight">\(X_a(\Omega) = X(\Omega)*S(\Omega)\)</span></p>
+<p><span class="math notranslate nohighlight">\(X_a(\Omega) = X(\Omega)*\frac{1}{2\pi}\sum_{k=-\infty}^{\infty} \Phi(\Omega -k\Omega_a)\)</span></p>
+<p><span class="math notranslate nohighlight">\(X_a(\Omega) = \frac{1}{2\pi}\sum_{k=-\infty}^{\infty} X(\Omega)*\Phi(\Omega -k\Omega_a)\)</span></p>
+<p><span class="math notranslate nohighlight">\(X_a(\Omega) = \frac{1}{2\pi}\sum_{k=-\infty}^{\infty} X(\Omega -k\Omega_a)\)</span></p>
+<p>Com a propriedade (<span class="math notranslate nohighlight">\(x(t-t_0) = x(t)*\delta(t-t_0)\)</span>, na frequência) tem-se que <span class="math notranslate nohighlight">\(X_a(\Omega)\)</span> será a repetição periódica do espectro de
+<span class="math notranslate nohighlight">\(X(\Omega)\)</span> espaçados de <span class="math notranslate nohighlight">\(\Omega_a\)</span>.
+Para que não tenha <em>aliasing</em> tem-se <span class="math notranslate nohighlight">\(X(\Omega)=0, \Omega &gt; \Omega_M\)</span> e <span class="math notranslate nohighlight">\(\Omega_a &gt; 2\Omega_M\)</span>.</p>
+<p>No contexo do problema, o sinal <span class="math notranslate nohighlight">\(x(t) = \cos(\Omega_{250} t)\)</span> onde <span class="math notranslate nohighlight">\(\Omega_{250} = 2\pi250\)</span> rad/s e <span class="math notranslate nohighlight">\(X(\Omega) = -\delta(\Omega+\Omega_{250}) + \delta(\Omega - \Omega_{250})\)</span>.</p>
+<p>Para reconstruir esse sinal, o espectro, <span class="math notranslate nohighlight">\(X(\Omega)\)</span> será deslocado de <span class="math notranslate nohighlight">\(200\)</span> Hz (frequência de amostragem). O resultado dessa operação será filtrado (idealmente) para retirar a repetição do espectro. O filtro (filtro reconstrutor) adotado é, por convenção, metade da frequência de amostragem <span class="math notranslate nohighlight">\(\Omega_{100} = 2\pi 100\)</span>.</p>
+<ul class="simple">
+<li><p>para <span class="math notranslate nohighlight">\(k = 0\)</span>, <span class="math notranslate nohighlight">\(X_a(\Omega) = -\delta(\Omega+\Omega_{250}) + \delta(\Omega - \Omega_{250})\)</span> e como os impulsos estão acima dos <span class="math notranslate nohighlight">\(100\)</span> Hz serão bloqueados;</p></li>
+<li><p>para <span class="math notranslate nohighlight">\(k = 1\)</span>, <span class="math notranslate nohighlight">\(X_a(\Omega) = -\delta(\Omega+\Omega_{250-200}) + \delta(\Omega - \Omega_{250+200})\)</span> e, neste caso o impulso em 450 Hz será retirado mas o impulso em -50 Hz passa pelo filtro;</p></li>
+<li><p>para <span class="math notranslate nohighlight">\(k = -1\)</span>, <span class="math notranslate nohighlight">\(X_a(\Omega) = -\delta(\Omega+\Omega_{250+200}) + \delta(\Omega - \Omega_{250-200})\)</span> e, neste caso o impulso em -450 Hz será retirado mas o impulso em 50 Hz passa pelo filtro;</p></li>
+<li><p>para <span class="math notranslate nohighlight">\(k = 2\)</span>, <span class="math notranslate nohighlight">\(X_a(\Omega) = -\delta(\Omega+\Omega_{250+400}) + \delta(\Omega - \Omega_{250-400})\)</span> e, neste caso ambos os impulsos serão serão bloquados;</p></li>
+</ul>
+<p>Para qualquer valor <span class="math notranslate nohighlight">\(|k| &gt; 2\)</span> os impulsos serão bloqueados.</p>
+<p>E, neste caso, <span class="math notranslate nohighlight">\(X_a(t)\)</span> será composto apenas pelos impulsos <span class="math notranslate nohighlight">\(-\delta(\Omega + \Omega_{50})\)</span> e <span class="math notranslate nohighlight">\(\delta(\Omega - \Omega_{50})\)</span></p>
+<p><span class="math notranslate nohighlight">\(X_a(\Omega) = -\delta(\Omega + \Omega_{50}) + \delta(\Omega - \Omega_{50})\)</span>, logo <span class="math notranslate nohighlight">\(x(t) = \cos(50\pi 2t)\)</span></p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Aula%2004%20-%20Transformada%20de%20Fourier%20em%20Tempo%20Discreto.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Aula 4 - Transformada de Fourier em Tempo Discreto</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Aula%2006%20-%20Transformada%20Z.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Aula 6 - Transformada Z</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Carlos Dias Maciel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

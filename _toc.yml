@@ -1,0 +1,18 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+chapters:
+- file: Aula 01 - Introdução
+- file: Aula 02 - Sinais em Tempo Discreto
+- file: Aula 03 - Sistemas em tempos discreto
+- file: Aula 04 - Transformada de Fourier em Tempo Discreto
+- file: Aula 05 - Amostragem
+- file: Aula 06 - Transformada Z
+- file: Aula 07 - Transformada Discreta de Fourier
+- file: Aula 08 - Filtros IIR
+- file: Aula 09 - Filtros FIR - Parte 1
+- file: Aula 10 - Filtros FIR - Parte 2
+- file: Aula 11 - Filtros FIR - Parte 3
+

@@ -1,0 +1,820 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Aula 7 - Transformada Discreta de Fourier &#8212; Notas de Aula - Processamento Digital de Sinais</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Aula 07 - Transformada Discreta de Fourier';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Aula 8 - Filtros IIR" href="Aula%2008%20-%20Filtros%20IIR.html" />
+    <link rel="prev" title="Aula 6 - Transformada Z" href="Aula%2006%20-%20Transformada%20Z.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo_lps.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo_lps.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Notas de Aula - Processamento Digital de Sinais
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Aula%2001%20-%20Introdu%C3%A7%C3%A3o.html">Aula 1 - Introdução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2002%20-%20Sinais%20em%20Tempo%20Discreto.html">Aula 2 - Sinais em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2003%20-%20Sistemas%20em%20tempos%20discreto.html">Aula 3 - Sistemas em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2004%20-%20Transformada%20de%20Fourier%20em%20Tempo%20Discreto.html">Aula 4 - Transformada de Fourier em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2005%20-%20Amostragem.html">Aula 5 - Amostragem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2006%20-%20Transformada%20Z.html">Aula 6 - Transformada Z</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Aula 7 - Transformada Discreta de Fourier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2008%20-%20Filtros%20IIR.html">Aula 8 - Filtros IIR</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FAula 07 - Transformada Discreta de Fourier.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Aula 07 - Transformada Discreta de Fourier.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Aula 7 - Transformada Discreta de Fourier</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="aula-7-transformada-discreta-de-fourier">
+<h1>Aula 7 - Transformada Discreta de Fourier<a class="headerlink" href="#aula-7-transformada-discreta-de-fourier" title="Permalink to this heading">#</a></h1>
+<p>Versão 2023</p>
+<p>Essas notas de aula podem ser compartilhadas nos termos da lincença Creative Commons CC BY-NC-ND 4.0, com propósitos exclusivamente educacionais.</p>
+<p>Attribution-NonCommercial-NoDerivatives 4.0 International</p>
+<p><font size="6"><strong>Contexto inicial</strong></font></p>
+<p><img alt="aula_6_slide_11" src="_images/dft_diagram.png" /></p>
+<ul class="simple">
+<li><p>A transformada discreta de Fourier é a transformada de Fourier para uma sequência de comprimento finito.</p></li>
+<li><p>Corresponde a amostras igualmente espaçadas (<span class="math notranslate nohighlight">\(\omega_k = \frac{2\pi}{N}k\)</span>) na frequência da T.F. de uma sequência.</p></li>
+</ul>
+<p>Notação: DFT (<em>Discrete Time Fourier Transform</em>) ou TDF (<em>Transformada Discreta de Fourier</em>).</p>
+<p>Neste caso, substituí-se a função complexa <span class="math notranslate nohighlight">\(e^{jwn}\)</span> por <span class="math notranslate nohighlight">\( e^{j(2\pi/N)k n} \)</span></p>
+<p><font size="6">Transformada Discreta de Fourier</font></p>
+<ul class="simple">
+<li><p>Considere uma sequência de tamanho finito <span class="math notranslate nohighlight">\(x[n]\)</span>, <span class="math notranslate nohighlight">\(n = 0, 1, \dots, N-1\)</span>. O par de <strong>Transformadas Discretas de Fourier</strong> é definido como:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
+\displaystyle X[k] = \sum_{n=0}^{N-1}x[n]W_{N}^{kn} &amp; \Leftarrow \; \text{Equação de Análise} \\
+\\
+\displaystyle x[n] = \frac{1}{N}\sum_{k=0}^{N-1}X[k]W_{N}^{-kn} &amp; \Leftarrow \; \text{Equação de Síntese}
+\end{cases} 
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\displaystyle \; W_N = e^{-j2\pi/N}\]</div>
+<ul class="simple">
+<li><p>OBSERVAÇÕES:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(X[k]\)</span>: são calculadas em frequências múltiplas de <span class="math notranslate nohighlight">\(\displaystyle \Omega_0 = \frac{2\pi}{N} F_s = \frac{2\pi}{NT}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(X[k]\)</span> é periódica <span class="math notranslate nohighlight">\(\Rightarrow\)</span> O primeiro período é o que interessa.</p>
+<ul>
+<li><p>Cuidado na Interpretação dos resultados</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><font size="4">Exemplo 1: Determine a DFT de <span class="math notranslate nohighlight">\(x[n] = \{1,1,1,1,1, 0, 0, 0, 0, 0\}\)</span></font></p>
+<div class="math notranslate nohighlight">
+\[\displaystyle N=10 \; \Rightarrow \; X[k] = \sum_{n=0}^{9}x[n]W_{10}^{nk} = \sum_{n=0}^{4}e^{-j\frac{2\pi nk}{10}} \]</div>
+<div class="math notranslate nohighlight">
+\[\displaystyle \text{como: } \sum_{n=0}^{N-1} ar^n = \frac{a(1-r^N)}{1-r} \text{ então:} \]</div>
+<div class="math notranslate nohighlight">
+\[\displaystyle X[k] = \frac{1-e^{-j2\pi k/2}}{1-e^{-j2\pi k/10}} = \frac{e^{-j\frac{\pi}{2}k}}{e^{j\frac{\pi}{10}k}} \cdot \frac{e^{j\frac{\pi}{2}k} - e^{-j\frac{\pi}{2}k}}{e^{j\frac{\pi}{10}k} - e^{-j\frac{\pi}{10}k}} \]</div>
+<div class="math notranslate nohighlight">
+\[\displaystyle X[k] = e^{-j\frac{2\pi k}{5}} \frac{\sin(k\pi/2)}{\sin(k\pi/10)} \quad k=0, 1, \dots, 9 \]</div>
+<ul>
+<li><p>OBSERVAÇÃO:</p>
+<ul class="simple">
+<li><p>Para o primeiro período desta sequência a transformada z da sequência anterior é:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(z) = \frac{1-z^{-5}}{1-z^{-1}} \]</div>
+<ul class="simple">
+<li><p>No círculo unitário, isto é, fazendo <span class="math notranslate nohighlight">\(z = e^{jw}\)</span> tem-se:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(e^{jw}) = e^{-j2w}\frac{\sin(5w/2)}{\sin(w/2)} \]</div>
+<ul class="simple">
+<li><p>Admitindo: <span class="math notranslate nohighlight">\(w_k = 2\pi k/N\)</span>, com <span class="math notranslate nohighlight">\(N = 10\)</span>, tem-se:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(w_k) = e^{-j\frac{2\pi}{5}k}\frac{\sin(\pi k/2)}{\sin(\pi k/10)} \]</div>
+</li>
+</ul>
+<p><img alt="aula_7_slide_14" src="_images/Aula_7_Slide_14.png" /></p>
+<p><font size="4"><strong>Interpretação da TDF através da Transformada z</strong></font></p>
+<ul class="simple">
+<li><p>A TDF de uma sequência finita <span class="math notranslate nohighlight">\(x[n]\)</span> pode ser interpretada como sendo as amostras regularmente espaçadas da transformada z no círculo unitário.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\displaystyle \text{Como: } X(z) = \sum_{n=0}^{N-1}x[n]z^{-n}, \text{ admitindo: } z=e^{j(2\pi/N)k}=W_{N}^{-k} \]</div>
+<div class="math notranslate nohighlight">
+\[\displaystyle \text{Então: } X[k] = X(z)|_{z=W_{N}^{-k}} \]</div>
+<p><img alt="aula_7_slide_15" src="_images/Aula_7_Slide_15.png" /></p>
+<p>Resolução (<a class="reference external" href="http://www.peb.ufrj.br/cursos/cob785/COB785_Conceitos.pdf">http://www.peb.ufrj.br/cursos/cob785/COB785_Conceitos.pdf</a>)
+é a menor mudança incremental do parâmetro que causa uma variação detectável no valor de saída.</p>
+<p><font size="6"><strong>Propriedades da TDF</strong></font></p>
+<ul class="simple">
+<li><p>Idênticas a TF</p></li>
+<li><p>Teorema de Parseval</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\displaystyle E_x = \sum_{n=0}^{N-1}|x[n]|^2 = \frac{1}{N}\sum_{k=0}^{N-1}|X(k)|^2 \tag{17}= \sum_{k=0}^{N-1}|X(k)/\sqrt{N}|^2 \]</div>
+<ul class="simple">
+<li><p>É interessante observar que o aumento de <span class="math notranslate nohighlight">\(N\)</span> leva a reduzir potência em cada harmônico <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+</ul>
+<p><font size="4">Convolução Circular e Linear</font></p>
+<ul class="simple">
+<li><p>Na TDF os sinais, no tempo e na frequência são admitidos periódicos.</p></li>
+<li><p>Considere duas sequências <span class="math notranslate nohighlight">\(x_1[n]\)</span> e <span class="math notranslate nohighlight">\(x_2[n]\)</span> de comprimento <span class="math notranslate nohighlight">\(N\)</span>.</p></li>
+<li><p>Qual é a sequência <span class="math notranslate nohighlight">\(x_3[n]\)</span> tal que: <span class="math notranslate nohighlight">\(X_3(k) = X_1(k)X_2(k)\)</span> ?</p></li>
+<li><p>Define-se a convolução circular entre duas sequências de tamanho <span class="math notranslate nohighlight">\(N\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ x_3[n] = \sum_{m=0}^{N-1}x_1[m]x_2[n-m] = \sum_{m=0}^{N-1}x_2[m]x_1[n-m] \]</div>
+<ul class="simple">
+<li><p>A quantidade <span class="math notranslate nohighlight">\([n - m]\)</span> é calculada via módulo <span class="math notranslate nohighlight">\(N\)</span>.</p></li>
+<li><p>Exemplo de Convolução Circular</p></li>
+</ul>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p><span class="math notranslate nohighlight">\(n\)</span></p></th>
+<th class="head text-center"><p>0</p></th>
+<th class="head text-center"><p>1</p></th>
+<th class="head text-center"><p>2</p></th>
+<th class="head text-center"><p>3</p></th>
+<th class="head text-center"><p>4</p></th>
+<th class="head text-center"><p>5</p></th>
+<th class="head text-center"><p>6</p></th>
+<th class="head text-center"><p>7</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(x_1(n)\)</span></p></td>
+<td class="text-center"><p>0.1</p></td>
+<td class="text-center"><p>0.2</p></td>
+<td class="text-center"><p>0.3</p></td>
+<td class="text-center"><p>0.4</p></td>
+<td class="text-center"><p>0.5</p></td>
+<td class="text-center"><p>0.6</p></td>
+<td class="text-center"><p>0.7</p></td>
+<td class="text-center"><p>0.8</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(x_2(n)\)</span></p></td>
+<td class="text-center"><p>0.3</p></td>
+<td class="text-center"><p>0.1</p></td>
+<td class="text-center"><p>0.5</p></td>
+<td class="text-center"><p>0.9</p></td>
+<td class="text-center"><p>0.8</p></td>
+<td class="text-center"><p>0.6</p></td>
+<td class="text-center"><p>0.4</p></td>
+<td class="text-center"><p>0.2</p></td>
+</tr>
+</tbody>
+</table>
+<p><font size="4">Cálculo da convolução Circular</font></p>
+<ul class="simple">
+<li><p>No círculo interno coloca-se, no sentido horário, <span class="math notranslate nohighlight">\(x_2[n-m]\)</span>.</p></li>
+<li><p>No círculo externo coloca-se, no sentido anti-horário, <span class="math notranslate nohighlight">\(x_1[m]\)</span>.</p></li>
+<li><p>As amostras correspondentes ao mesmo raio são multiplicadas e os produtos somados.</p></li>
+<li><p>Os outros valores da convolução são obtidos rotacionando o círculo interno no sentido horário.</p></li>
+<li><p>O processo é repetido até que a primeira amostra do círculo interno chegue a sua posição original.</p></li>
+</ul>
+<p><img alt="aula_7_slide_18" src="_images/Aula_7_Slide_18.png" /></p>
+<p><font size="5">Exemplo: Convolução Circular</font></p>
+<div class="math notranslate nohighlight">
+\[\begin{split} \text{sejam: } x_1[n]=x_2[n]=\begin{cases} 1, &amp;0\leq n&lt;L-1 \\ 0, &amp;c.c. \end{cases} \end{split}\]</div>
+<ul class="simple">
+<li><p>Estabelecendo <span class="math notranslate nohighlight">\(N=L\)</span>, as TDFs das sequências acima serão:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split} X_1(k) = X_2(k) = \sum_{n=0}^{N-1}W_{N}^{kn} = \begin{cases} N, &amp;k=0 \\ 0, c.c. \end{cases} \end{split}\]</div>
+<ul class="simple">
+<li><p>Multiplicando <span class="math notranslate nohighlight">\(X_1(k)\)</span> por <span class="math notranslate nohighlight">\(X_2(k)\)</span> tem-se:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split} Z(k) = X_1(k)X_2(k) = \begin{cases} N^2, &amp;k=0 \\ 0, &amp;c.c. \end{cases} \end{split}\]</div>
+<ul class="simple">
+<li><p>A TDF inversa da equação acima resultará na convolução circular entre <span class="math notranslate nohighlight">\(x_1[n]\)</span> e <span class="math notranslate nohighlight">\(x_2[n]\)</span>, isto é:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ z[n] = \frac{1}{N} \sum_{k=0}^{N-1}Z(k)W_{N}^{-nk} = \frac{1}{N}Z(0) = N, \quad n=0, 1, \dots, N-1 \]</div>
+<p><font size="5"><strong>Veja figura:</strong></font></p>
+<p><img alt="aula_7_slide_20" src="_images/Aula_7_Slide_20.png" /></p>
+<ul class="simple">
+<li><p>Observe que o resultado acima não é a convolução linear entre <span class="math notranslate nohighlight">\(x_1[n]\)</span> e <span class="math notranslate nohighlight">\(x_2[n]\)</span>.</p></li>
+<li><p>Para a obtenção da convolução linear é necessário acrescentar zeros às sequências, como será visto em seguida.</p></li>
+<li><p>A Convolução linear entre duas sequências de tamanho <span class="math notranslate nohighlight">\(N\)</span> e <span class="math notranslate nohighlight">\(M\)</span>, é uma  sequência de tamanho <span class="math notranslate nohighlight">\(N+M-1\)</span>.</p></li>
+</ul>
+<p><font size="5">**Obtenção da Convolução Linear</font></p>
+<ul class="simple">
+<li><p>Primeiramente se forma duas novas sequências de tamanho <span class="math notranslate nohighlight">\(N+M-1\)</span>.</p></li>
+<li><p>Acrescenta-se zeros nas duas sequências para formar duas novas sequências de tamanho <span class="math notranslate nohighlight">\(N+M-1\)</span>.</p></li>
+<li><p>Em seguida faz-se a convolução circular a partir destas duas novas sequências.</p></li>
+<li><p>No exemplo anterior, acrescenta-se <span class="math notranslate nohighlight">\(N-1\)</span> zeros nas duas sequências, de modo que ambas fiquem com comprimento <span class="math notranslate nohighlight">\(2N-1\)</span> e em seguida faz-se a convolução circular.</p></li>
+<li><p>Como resultado tem-se a convolução linear entre as duas sequências originais.</p></li>
+</ul>
+<p><font size="4">**Exemplo: Convolução Linear (Do exemplo anterior)</font></p>
+<ul class="simple">
+<li><p>Constrói-se duas sequências novas de tamanho <span class="math notranslate nohighlight">\(2N\)</span> e faz-se a convolução</p></li>
+</ul>
+<p><img alt="aula_7_slide_20" src="_images/Aula_7_Slide_22.png" /></p>
+<p><font size="5"><strong>Convolução Linear Utilizando DFT (FFT)</strong></font></p>
+<ul class="simple">
+<li><p>Considere duas sequências de tamanho <span class="math notranslate nohighlight">\(N_1\)</span> e <span class="math notranslate nohighlight">\(N_2\)</span>.</p></li>
+<li><p>Forma-se duas sequências novas de tamanho <span class="math notranslate nohighlight">\(N_1 + N_2 -1\)</span> acrescentando zeros.</p></li>
+<li><p>Calcula-se a DFT das duas sequências <span class="math notranslate nohighlight">\(X_1(k)\)</span> e <span class="math notranslate nohighlight">\(X_2(k)\)</span>.</p></li>
+<li><p>Calcula-se o produto <span class="math notranslate nohighlight">\(X_3(k) = X_1(k)\cdot X_2(k)\)</span>.</p></li>
+<li><p>Calcula-se a DFT inversa <span class="math notranslate nohighlight">\(x_3[n]\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(X_3(k)\)</span> é a convolução linear entre as duas sequências originais.</p></li>
+<li><p>Como a DFT é calculada através de algoritmos de FFT, o procedimento acima é rápido.</p></li>
+</ul>
+<p><font size="5">Exemplos de cálculo da TDF no computador</font></p>
+<ul class="simple">
+<li><p>Para um sinal senoidal</p></li>
+<li><p>Para um sinal composto de dois tons senoidais</p></li>
+</ul>
+<p><font size="5">Exemplo de Análise Espectral</font></p>
+<p>Amostragem do sinal em Fs <span class="math notranslate nohighlight">\(\to\)</span> em frequência o sinal é periódico em Fs</p>
+<p>Sinal em tempo discreto <span class="math notranslate nohighlight">\(\to\)</span> em frequência o sinal é periódico em <span class="math notranslate nohighlight">\(2\pi\)</span></p>
+<p>Resolução: <span class="math notranslate nohighlight">\(\frac{2\pi}{N}\)</span> (tempo discreto) ou <span class="math notranslate nohighlight">\(\frac{Fs}{N}\)</span> (equivalente no tempo contínuo)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">scipy.fftpack</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="n">fo</span><span class="p">,</span> <span class="n">f1</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">18</span>
+
+<span class="n">Fs</span> <span class="o">=</span> <span class="mi">150</span>
+<span class="n">T</span>  <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">Fs</span>
+
+<span class="n">Res</span> <span class="o">=</span> <span class="n">Fs</span><span class="o">/</span><span class="n">N</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resolução: &#39;</span><span class="p">,</span> <span class="n">Res</span><span class="p">,</span><span class="s1">&#39; Hz&#39;</span><span class="p">)</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">fo</span><span class="o">*</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">f1</span><span class="o">*</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">fftpack</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Fs</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="c1"># </span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">[:</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">],</span><span class="mi">2</span><span class="o">/</span><span class="n">N</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Hz&#39;</span><span class="p">)</span>
+<span class="c1"># plt.show()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Resolução:  0.15  Hz
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5395/3137496591.py:24: MatplotlibDeprecationWarning: Auto-removal of overlapping axes is deprecated since 3.6 and will be removed two minor releases later; explicitly call ax.remove() as needed.
+  plt.subplot(211)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0, &#39;Hz&#39;)
+</pre></div>
+</div>
+<img alt="_images/21dc887b1ac1ef795fb342669190594d8ac989f27edfb66a755c13836b069eb1.png" src="_images/21dc887b1ac1ef795fb342669190594d8ac989f27edfb66a755c13836b069eb1.png" />
+</div>
+</div>
+<ul class="simple">
+<li><p>OBS: A fft é simétrica em torno de 1+Nfft/2 e Fftx(1) é o componente DC.</p></li>
+<li><p>Escalamento para a fft não ser função do tamanho do sinal</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Mx</span> <span class="o">=</span> <span class="n">Mx</span><span class="o">/</span><span class="n">N</span><span class="p">;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Criação do vetor frequência f para saída gráfica</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">Nfft</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">Nfft</span><span class="p">;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">f</span><span class="o">*</span><span class="n">fs</span><span class="p">;</span>
+<span class="n">plot</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">Mx</span><span class="p">);</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;3. - Análise Espectral&#39;</span><span class="p">);</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;freqüência [Hz]&#39;</span><span class="p">);</span> <span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Escalar&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><font size="6"><strong>TRANSFORMADA RÁPIDA DE FOURIER - FAST FOURIER TRANSFORM (F.F.T.)</strong></font></p>
+<ul class="simple">
+<li><p>Algoritmo proposto por Cooley e Tukey em 1966</p></li>
+<li><p>Explora as propriedades de simetria da DFT</p></li>
+<li><p>Diminui sensivelmente o número de operações realizadas.</p></li>
+</ul>
+<p><font size="5">Computação da D.F.T. - Algoritmo F.F.T. (Fast Fourier Transform)</font></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split} \text{a D.F.T. é dada por: } X(k) = \sum_{n=0}^{N-1}x[n]\cdot W_{N}^{kn} \\ k=0,1,2,\dots,N-1 \end{split}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[ W_N = e^{-j\frac{2\pi}{N}} \]</div>
+<p>Re-escrevendo a equação acima, temos (N par):</p>
+<p>Posições pares e ímpares de <span class="math notranslate nohighlight">\(x[n]\)</span></p>
+<div class="math notranslate nohighlight">
+\[ X(k) = \sum_{n_0=0}^{(N-1-1)/2}x[2n_0]W_N^{2n_0)k}+\sum_{n_1=0}^{(N-1-1)/2}x[2n_1+1]W_N^{(2n_1+1)k} \]</div>
+<div class="math notranslate nohighlight">
+\[ = \sum_{n_0=0}^{(N-1-1)/2}x[2n_0]W_N^{2n_0)k}+W_N^k\sum_{n_1=0}^{(N-1-1)/2}x[2n_1+1]W_N^{(2n_1)k} \]</div>
+<div class="math notranslate nohighlight">
+\[ W_N^{2kn}=e^{-j2\pi2kn/N}=e^{-j2\pi kn/2N}=W_{N/2}^{kn} \]</div>
+<p>E finalmente:</p>
+<div class="math notranslate nohighlight">
+\[X(k) = \sum_{n_0=0}^{(N-2)/2}x[2n_0]W_{N/2}^{n_0}+W_{N}^{k}\sum_{n_1=0}^{(N-2)/2}x[2n_1+1]W_{N/2}^{n_1} \]</div>
+<p>Ou seja, <span class="math notranslate nohighlight">\(X(k) = G(k) + W_{N}^{k} H(k)\)</span></p>
+<p><span class="math notranslate nohighlight">\(G(k)\)</span> é uma DFT de <span class="math notranslate nohighlight">\(N/2\)</span> pontos (pontos pares)</p>
+<p><span class="math notranslate nohighlight">\(H(k)\)</span> é uma DFT de <span class="math notranslate nohighlight">\(N/2\)</span> pontos (pontos impares)</p>
+<p>Para <span class="math notranslate nohighlight">\(N = 8\)</span>, teremos :</p>
+<p><img alt="aula_10_slide_3" src="_images/Aula_10_Slide_3.png" /></p>
+<p><span class="math notranslate nohighlight">\(G(k)\)</span> e <span class="math notranslate nohighlight">\(H(k)\)</span> tem período <span class="math notranslate nohighlight">\(N/2\)</span>. <span class="math notranslate nohighlight">\(G(0) = G(4)\)</span>. Multiplicações = <span class="math notranslate nohighlight">\(4(N/2)^2 \cdot2\)</span> e
+adições = <span class="math notranslate nohighlight">\((N/2)\cdot(2N-2)\cdot2\)</span></p>
+<p>Analogamente, ‘quebrando-se’ <span class="math notranslate nohighlight">\(G(k)\)</span> temos:</p>
+<p><img alt="aula_10_slide_4_1" src="_images/Aula_10_Slide_4_1.png" /></p>
+<p>A DFT de <span class="math notranslate nohighlight">\(x[0]\)</span> e <span class="math notranslate nohighlight">\(x[4]\)</span> acima é calculada como:</p>
+<p><img alt="aula_10_slide_4_2" src="_images/Aula_10_Slide_4_2.png" /></p>
+<p>Número de multiplicações complexas <span class="math notranslate nohighlight">\(\Rightarrow\)</span> <span class="math notranslate nohighlight">\(N\log_2N\)</span></p>
+<p><font size="5">Exemplo com 16 pontos</font></p>
+<p><img alt="aula_10_slide_5" src="_images/Aula_10_Slide_5.png" /></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">DTFT</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">FFT</span>  <span class="o">=</span> <span class="p">[]</span>
+<span class="n">I</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
+    <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">DTFT</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">FFT</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">DTFT</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">FFT</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Com sinais com comprimento 1.000.000 pontos a FFT fica </span><span class="si">{}</span><span class="s1"> mais rápido que a DTFT&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">DTFT</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">DTFT</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">FFT</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">FFT</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Se o tempo de executar a FFT for 1 minuto a DFT vai durar aproximadamente 50 dias&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Com sinais com comprimento 1.000.000 pontos a FFT fica 72375 mais rápido que a DTFT
+Se o tempo de executar a FFT for 1 minuto a DFT vai durar aproximadamente 50 dias
+</pre></div>
+</div>
+<img alt="_images/bc2f71f709da624dad9b1b489d18130dd8102291061e499497779450324787e3.png" src="_images/bc2f71f709da624dad9b1b489d18130dd8102291061e499497779450324787e3.png" />
+</div>
+</div>
+<p>Notas:</p>
+<ol class="arabic">
+<li><p><a class="reference external" href="http://www.fftw.org/">http://www.fftw.org/</a></p></li>
+<li><p>Zero-padding</p>
+<p>N = 100 amostras <span class="math notranslate nohighlight">\(\to\)</span> N’ = 128 = 2^7  incluir 0’s no final das N amostras</p>
+<p>N’’= 64 amostras</p>
+</li>
+</ol>
+<p><img alt="aula_7_slide_25" src="_images/Aula_7_Slide_25.png" /></p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Aula%2006%20-%20Transformada%20Z.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Aula 6 - Transformada Z</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Aula%2008%20-%20Filtros%20IIR.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Aula 8 - Filtros IIR</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Carlos Dias Maciel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

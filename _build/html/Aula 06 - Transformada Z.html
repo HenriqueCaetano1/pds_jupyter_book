@@ -1,0 +1,969 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Aula 6 - Transformada Z &#8212; Notas de Aula - Processamento Digital de Sinais</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Aula 06 - Transformada Z';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Aula 6 - Transformada Z" href="Aula%2007%20-%20Transformada%20Discreta%20de%20Fourier.html" />
+    <link rel="prev" title="Aula 5 - Amostragem" href="Aula%2005%20-%20Amostragem.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo_lps.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo_lps.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Notas de Aula - Processamento Digital de Sinais
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Aula%2001%20-%20Introdu%C3%A7%C3%A3o.html">Aula 1 - Introdução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2002%20-%20Sinais%20em%20Tempo%20Discreto.html">Aula 2 - Sinais em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2003%20-%20Sistemas%20em%20tempos%20discreto.html">Aula 3 - Sistemas em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2004%20-%20Transformada%20de%20Fourier%20em%20Tempo%20Discreto.html">Aula 4 - Transformada de Fourier em Tempo Discreto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2005%20-%20Amostragem.html">Aula 5 - Amostragem</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Aula 6 - Transformada Z</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula%2007%20-%20Transformada%20Discreta%20de%20Fourier.html">Aula 6 - Transformada Z</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FAula 06 - Transformada Z.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Aula 06 - Transformada Z.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Aula 6 - Transformada Z</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="n">font</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;family&#39;</span> <span class="p">:</span> <span class="s1">&#39;DejaVu Sans&#39;</span><span class="p">,</span>
+        <span class="c1">#&#39;weight&#39; : &#39;bold&#39;,</span>
+        <span class="s1">&#39;size&#39;</span>   <span class="p">:</span> <span class="mi">24</span><span class="p">}</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">font</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="aula-6-transformada-z">
+<h1>Aula 6 - Transformada Z<a class="headerlink" href="#aula-6-transformada-z" title="Permalink to this heading">#</a></h1>
+<p>Versão 2023</p>
+<p>Essas notas de aula podem ser compartilhadas nos termos da lincença Creative Commons CC BY-NC-ND 4.0, com propósitos exclusivamente educacionais.</p>
+<p>Attribution-NonCommercial-NoDerivatives 4.0 International</p>
+<p><font size="6"><strong>Introdução</strong></font></p>
+<ul class="simple">
+<li><p>A transformada - z pode ser considerada como uma generalização da transformada de Fourier para sequências.</p></li>
+<li><p>Desempenha, para sistemas discretos,  o mesmo papel que a  transformada de Laplace faz para sistemas contínuos no tempo.</p></li>
+</ul>
+<p><font size="6"><strong>Utilização:</strong></font></p>
+<ul class="simple">
+<li><p>Análise e projeto de sistemas lineares discretos e invariantes no tempo.
+Determinação da função do sistema <span class="math notranslate nohighlight">\(H(z)\)</span> ou da resposta em frequência <span class="math notranslate nohighlight">\(H(e^{jw})\)</span>.</p></li>
+<li><p>Verificação da Estabilidade e Causalidade de Sistemas pela Análise dos pólos e zeros da função.</p></li>
+</ul>
+<p><font size="6"><strong>1. Definição da Transformada z</strong></font></p>
+<p>Considere a sequência <span class="math notranslate nohighlight">\(x[n] : n = 0,  \pm1, \pm2, \dots\)</span></p>
+<ul class="simple">
+<li><p>A transformada z de <span class="math notranslate nohighlight">\(x[n]\)</span> é definida como segue:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[X(z) = \sum_{n=-\infty}^{\infty}x[n]z^{-n}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(z^{-n}\)</span>: operador de atraso de <span class="math notranslate nohighlight">\(nT_a\)</span> segundos ou <span class="math notranslate nohighlight">\(n\)</span> amostras.</p></li>
+<li><p><span class="math notranslate nohighlight">\(z\)</span> é uma variável complexa do tipo: <span class="math notranslate nohighlight">\(z = re^{j\omega}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(r\)</span> é o módulo da variável,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\omega\)</span> é o ângulo.</p></li>
+<li><p>Lembre que <span class="math notranslate nohighlight">\(0 \leq \omega &lt; 2\pi\)</span> ou <span class="math notranslate nohighlight">\(-\pi \leq \omega &lt; \pi\)</span>.</p></li>
+</ul>
+<p><font size="6">Interpretação no Plano z</font></p>
+<ul class="simple">
+<li><p>Para $Círculo de raio unitário)</p></li>
+<li><p><span class="math notranslate nohighlight">\(z = e^{jw}\)</span> <span class="math notranslate nohighlight">\(\Rightarrow\)</span> Transformada de Fourier</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(e^{jw}) = \sum_{n=-\infty}^{\infty}x[n]e^{-jwn} \]</div>
+<p><font size="6">Região de Convergência - RDC</font></p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(X(z)\)</span> é uma série de potências, portanto ela existe somente para os valores de <span class="math notranslate nohighlight">\(z\)</span> para os quais a série converge. Define-se então a Região de Convergência da transformada z tal que:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ |X(z)| = \left| \sum_{n=-\infty}^{\infty}x[n]z^{-n} \right| &lt; \infty \]</div>
+<ol class="arabic simple" start="2">
+<li><p>Exemplos para sequências de duração finita:</p></li>
+</ol>
+<p><span class="math notranslate nohighlight">\(x[n] = \{\mathbf{1}, 3, 5, 7, 0, 1 \} \leftrightarrow X(z) = 1 + 3z^{-1} + 5z^{-2} + 7z^{-3} + z^{-5}\quad \)</span></p>
+<p>RDC: plano <span class="math notranslate nohighlight">\(z\)</span>, exceto quando <span class="math notranslate nohighlight">\(z=0\)</span></p>
+<p><span class="math notranslate nohighlight">\(x[n] = \{1, 2, \mathbf{3}, 4, 5 \} \leftrightarrow X(z) = z^2 + 2z + 3 + 4z^{-1} +  5z^{-2}\quad \)</span></p>
+<p>RDC: plano <span class="math notranslate nohighlight">\(z\)</span>, exceto <span class="math notranslate nohighlight">\(z=0\)</span> e <span class="math notranslate nohighlight">\(z=\infty\)</span></p>
+<p>$x[n] = \delta(n+n_0),; n_0&gt;0 \leftrightarrow X(z) = z^n_0</p>
+<p>RDC: plano <span class="math notranslate nohighlight">\(z\)</span>, exceto quando z=\infty</p>
+<p><strong>OBS: Para sequências finitas: A RDC engloba todo o plano <span class="math notranslate nohighlight">\(z\)</span>, exceto, possivelmente, <span class="math notranslate nohighlight">\(z = 0\)</span> ou <span class="math notranslate nohighlight">\(z = \infty\)</span></strong></p>
+<center> <font size="6">Convergência para Séries Infinitas</font> </center>
+<p>Sabe-se que: <span class="math notranslate nohighlight">\(z = re^{jw}\)</span>. Então pela definição de convergência:</p>
+<div class="math notranslate nohighlight">
+\[ |X(z)| = \left| \sum_{n=-\infty}^{\infty}x[n]r^{-n}e^{-jwn} \right| \leq \sum_{n=-\infty}^{\infty}|x[n]r^{-n}| &lt; \infty \]</div>
+<ul class="simple">
+<li><p>Portanto: “<span class="math notranslate nohighlight">\(X(z)\)</span> é finita se <span class="math notranslate nohighlight">\(x[n]r^{-n}\)</span> é absolutamente somável”</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ |X(z)| \leq \sum_{n=-\infty}^{-1}|x[n]r^{-n}| + \sum_{n=0}^{\infty}|x[n]r^{-n}| \]</div>
+<div class="math notranslate nohighlight">
+\[ = \sum_{n=-\infty}^{-1}|x[-n]r^{n}| + \sum_{n=0}^{\infty}|x[n]r^{-n}| \]</div>
+<div class="math notranslate nohighlight">
+\[ |X(z)| \leq \sum_{n=-\infty}^{-1}|x(-n)r^{n}| + \sum_{n=0}^{\infty}|x(n)r^{-n}| \]</div>
+<ul class="simple">
+<li><p>O primeiro termo:  Define uma Sequência Lateral Esquerda</p></li>
+<li><p>RDC <span class="math notranslate nohighlight">\(\Rightarrow\)</span> Interior de um círculo <span class="math notranslate nohighlight">\(R_H &lt; \infty\)</span></p></li>
+<li><p>O segundo termo: Define uma Sequência Lateral Direita</p></li>
+<li><p>RDC <span class="math notranslate nohighlight">\(\Rightarrow\)</span> Exterior de um círculo <span class="math notranslate nohighlight">\(R_L &gt; 0\)</span></p></li>
+</ul>
+<p><font size="4">Portanto: “A RDC de uma sequência infinita será uma região anular (um anel) dada pela intersecção das RDC individuais das duas sequências”. Isto é:</font></p>
+<div class="math notranslate nohighlight">
+\[ R_L &lt; |z| &lt; R_H \]</div>
+<p><font size="6">Região de Convergência</font></p>
+<p><img alt="fig_6_2" src="_images/fig_6_2.png" />
+<img alt="fig_6_3" src="_images/fig_6_3.png" />
+<img alt="fig_6_4" src="_images/fig_6_4.png" /></p>
+<p><font size="6">Exemplo 1: Determine a transformada z da sequência:</font></p>
+<div class="math notranslate nohighlight">
+\[\begin{split} x(n) = \alpha^nu[n] = \begin{cases} \alpha^n, &amp;n\geq0 \\ 0, &amp;c.c. \end{cases} \; \Longrightarrow \; X(z) = \sum_{n=0}^{\infty}\alpha^nz^{-n} = \sum_{n=0}^{\infty}(\alpha z^{-1})^n \end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} \text{admitindo: } |\alpha z^{-1}|&lt;1 \; \Longrightarrow \; \begin{cases} X(z)=\frac{1}{1-\alpha z^{-1}} \\ RDC: |z|&gt;|\alpha| \end{cases} \; \Longrightarrow \; \text{Pólo em $z=\alpha$} \end{split}\]</div>
+<p><img alt="aula_6_slide_9" src="_images/Aula_6_Slide_9.png" /></p>
+<p><font size="6">Exemplo 2: Determine a transformada z da sequência</font>
+<img alt="aula_6_slide_11" src="_images/Aula_6_Slide_11.png" /></p>
+<div class="math notranslate nohighlight">
+\[\begin{split} x(n) = -\alpha^n u[-n-1] = \begin{cases} 0, &amp;n\geq0 \\ -\alpha^n, &amp;n\leq-1 \end{cases} \end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[ X(z) = \sum_{n=-\infty}^{-1}-\alpha^nz^{-n} = -\sum_{n=1}^{\infty}(\alpha^{-1}z)^n \; \Longrightarrow \; X(z) = 1 - \sum_{n=0}^{\infty}(\alpha^{-1}z)^n \]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} \text{admitindo: } |\alpha^{-1}z|&lt;1 \; \Longrightarrow \; \begin{cases} X(z) = \frac{1}{1-\alpha z^{-1}} \\ RDC: |z| &lt; |\alpha| \end{cases} \; \Longrightarrow \; \text{pólo em $z=\alpha$} \end{split}\]</div>
+<center><b>OBS:</b></center>
+<center>- A RDC não inclui o pólo em $z = \alpha$</center>
+<center>- A transformada é igual à do exemplo anterior</center><p><font size="6">Exemplo 3: Determine a transformada z da sequência</font></p>
+<div class="math notranslate nohighlight">
+\[ x[n] = \alpha^n u[n] + \beta^nu[-n-1] \]</div>
+<ul class="simple">
+<li><p>Admitindo <span class="math notranslate nohighlight">\(|\alpha|&lt;|\beta|\)</span>. Então, utilizando os dois exemplos anteriores tem-se:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split} \begin{cases} X(z) = \frac{1}{1-\alpha z^{-1}} + \frac{-1}{1-\beta z^{-1}} = \frac{\beta-\alpha}{\alpha+\beta-z-\alpha\beta z^{-1}} \\ RDC: |\alpha|&lt;|z|&lt;|\beta| \end{cases} \end{split}\]</div>
+<p><img alt="aula_6_slide_12" src="_images/Aula_6_Slide_12.png" /></p>
+<center>Observe que se $|\alpha|>|\beta|$ não existe uma região de convergência e portanto $X(z)$ não existe.</center><p><font size="6">3. Propriedades da Região de Convergência</font></p>
+<ul class="simple">
+<li><p>É um anel centrado na origem: <span class="math notranslate nohighlight">\(0 \leq R_L &lt; |z| &lt; R_H &lt; \infty\)</span>.</p></li>
+<li><p>A Transformada de Fourier existe se a RDC inclui o círculo unitário.</p></li>
+<li><p>A RDC não contém pólos.</p></li>
+<li><p>Se <span class="math notranslate nohighlight">\(x(n)\)</span> tem duração finita <span class="math notranslate nohighlight">\(\Rightarrow\)</span> RDC é o plano <span class="math notranslate nohighlight">\(z\)</span> exceto, possivelmente os pontos <span class="math notranslate nohighlight">\(z = 0\)</span> ou <span class="math notranslate nohighlight">\(z = \infty\)</span>.</p></li>
+<li><p>Sequência Lateral Direita: a RDC se estende desde o pólo mais exterior até o infinito.</p></li>
+<li><p>Sequência Lateral Esquerda: a RDC se estende desde zero até o pólo mais interior.</p></li>
+<li><p>Para sequências Bilaterais a RDC é um anel que não contém pólos.</p></li>
+<li><p>A RDC é uma região conectada.</p></li>
+</ul>
+<p><img alt="aula_6_slide_12" src="_images/Aula_6_Slide_12.png" /></p>
+<p><font size="6">4.  Propriedades da Transformada z</font></p>
+<ol class="arabic simple">
+<li><p>Linearidade</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ ax_1[n] + bx_2[n] \leftrightarrow aX_1(z) + bX_2(z) \quad RDC=Rx_1 \cap Rx_2\]</div>
+<ol class="arabic simple" start="2">
+<li><p>Deslocamento no Tempo</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[x[n-n_0] \leftrightarrow z^{-n_0}X(z) \quad RDC=Rx \quad \pm z=0/\infty\]</div>
+<ol class="arabic simple" start="3">
+<li><p>Multiplicação por uma sequência exponencial</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[a^nx[n] \leftrightarrow X(z/a) \quad RDC=|a|Rx\]</div>
+<ol class="arabic simple" start="4">
+<li><p>Diferenciação de <span class="math notranslate nohighlight">\(X(z)\)</span></p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[nx[n] \leftrightarrow -z\frac{d}{dz}X(z) \quad RDC=RX \quad \pm z=0/\infty\]</div>
+<ol class="arabic simple" start="5">
+<li><p>Complexo Conjugado de uma Sequência</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ x^\ast[n] \leftrightarrow X^\ast(z^\ast) \quad RDC=Rx \]</div>
+<ol class="arabic simple" start="6">
+<li><p>Reversão no Tempo</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split} x[-n] \leftrightarrow X(1/z) \quad RDC=1/Rx \quad \begin{cases} R_1&lt;|z|&lt;R_2 \\ \frac{1}{R_2}&lt;|z|&lt;\frac{1}{R_1} \end{cases} \end{split}\]</div>
+<ol class="arabic simple" start="7">
+<li><p>Convolução de Sequências</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ x_1[n]\ast x_2[n] = \sum_{m=-\infty}^{\infty}x_1(m)x_2(n-m) = \sum_{m=-\infty}^{\infty}x_1(n-m)x_2(m) \]</div>
+<div class="math notranslate nohighlight">
+\[ x_1(n)\ast x_2(n) \leftrightarrow X_1(z)X_2(z) \quad RDC=Rx_1\cap Rx_2 \]</div>
+<ol class="arabic simple" start="8">
+<li><p>Teorema do Valor Inicial: Se <span class="math notranslate nohighlight">\(x[n] = 0\)</span>, <span class="math notranslate nohighlight">\(n&lt;0\)</span>, então:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ x[0] = \lim_{z\to\infty}X(z) \]</div>
+<div class="math notranslate nohighlight">
+\[ \lim_{n \to \infty} x[n] = \lim_{z \to 1} (z-1)X(z) \]</div>
+<ol class="arabic simple" start="9">
+<li><p>Teorema da Convolução Complexa: Se <span class="math notranslate nohighlight">\(w[n] = x_1[n]x_2[n]\)</span> então:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[ W(z) = \frac{1}{2\pi j} \oint_{C_1}X_1(v)X_2(z/v)v^{-1}dv = \frac{1}{2\pi j} \oint_{C_1} X_1(z/v)X_2(v)v^{-1}dv \]</div>
+<div class="math notranslate nohighlight">
+\[ RDC: R_{x_1}^{L}R_{x_2}^{L} &lt; |z| &lt; R_{x_1}^{H}R_{x_2}^{H} \]</div>
+<ul class="simple">
+<li><p>Se <span class="math notranslate nohighlight">\(C_1\)</span> englobar o círculo unitário:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ W(e^{jw}) = \frac{1}{2\pi} \int_{-\pi}^{\pi} X_1(e^{j\theta})X_2(e^{j(w-\theta)})d\theta \]</div>
+<p><font size="6">5. Transformada z Inversa</font></p>
+<ul class="simple">
+<li><p>Métodos de Inversão da transformada:</p>
+<ul>
+<li><p>Método por inspeção,</p></li>
+<li><p>Expansão em Frações Parciais,</p></li>
+<li><p>Expansão em Séries de Potências,</p></li>
+<li><p>Divisão Longa ou continuada,</p></li>
+<li><p>Teorema da Integral de Cauchy.</p></li>
+</ul>
+</li>
+<li><p>Método por Inspeção</p>
+<ul>
+<li><p>O método por inspeção consiste em encontrar um (ou mais) pares conhecidos de transformadas.</p></li>
+<li><p>Estes pares são geralmente dados em tabelas, e consistem das funções padrões encontras em engenharia (exponencial, degrau, cosseno, etc.).</p></li>
+</ul>
+</li>
+</ul>
+<p><font size="4">Exemplo 4: Método por inspeção</font></p>
+<div class="math notranslate nohighlight">
+\[ a^nu(n) \leftrightarrow \frac{1}{1-az^{-1}} \; \Leftrightarrow \; \left( \frac{1}{2} \right)^nu(n) \leftrightarrow \frac{1}{1-\frac{1}{2}z^{-1}} \]</div>
+<div class="math notranslate nohighlight">
+\[ |z|&gt;|a| \qquad \qquad |z|&gt;1/2 \]</div>
+<p><font size="6"><strong>Método por Expansão em Frações Parciais</strong></font></p>
+<ul class="simple">
+<li><p>Este método é utilizado quando <span class="math notranslate nohighlight">\(X(z)\)</span> é dada por um polinômio racional do tipo:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(z) = \frac{N(z)}{Q(z)} \]</div>
+<div class="math notranslate nohighlight">
+\[ X(z) = \frac{\sum_{k=0}^{M}b_kz^{-k}}{\sum_{k=0}^{N}a_kz^{-k}} = \frac{z^N}{z^M} \frac{\sum_{k=0}^{M}b_kz^{M-k}}{\sum_{k=0}^{N}a_kz^{N-k}} \]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(M &gt; N \Rightarrow M - N\)</span> pólos em <span class="math notranslate nohighlight">\(z = 0\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(M &lt; N \Rightarrow N - M\)</span> zeros em <span class="math notranslate nohighlight">\(z = 0\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> pólos e <span class="math notranslate nohighlight">\(M\)</span> zeros não nulos</p></li>
+</ul>
+<ul class="simple">
+<li><p>Expressando a equação anterior em termos dos seus pólos e zeros tem-se que:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(M\)</span> zeros <span class="math notranslate nohighlight">\(c_k\)</span> não nulos</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> pólos <span class="math notranslate nohighlight">\(d_k\)</span> não nulos</p></li>
+</ul>
+</li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(z) = \frac{b_0}{a_0} \frac{\prod_{k=1}^{M}(1-c_kz^{-1})}{\prod_{k=1}^{N}(1-d_kz^{-1})} \]</div>
+<ul class="simple">
+<li><p>Tem-se três situações diferentes que devemos analisar:</p></li>
+</ul>
+<p><strong>Primeiro caso:</strong> <span class="math notranslate nohighlight">\(M &lt; N\)</span> e pólos de primeira ordem.</p>
+<div class="math notranslate nohighlight">
+\[ \text{Expressa-se $X(z)$ como: } X(z) = \sum_{k=1}^{N}\frac{A_k}{1-d_kz^{-1}} \]</div>
+<ul class="simple">
+<li><p>Os coeficientes <span class="math notranslate nohighlight">\(A_k\)</span> são calculados multiplicando ambos ao lados da equação por <span class="math notranslate nohighlight">\((1-d_kz^{-1})\)</span>. Assim, para <span class="math notranslate nohighlight">\(z = d_k\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ A_k = (1-d_kz^{-1})X(z)|_{z=d_k} \]</div>
+<p><strong>Segundo caso:</strong> <span class="math notranslate nohighlight">\(M \geq N\)</span> e pólos de primeira ordem.</p>
+<div class="math notranslate nohighlight">
+\[ \text{Expressa-se $X(z)$ como: } X(z) = \sum_{k=0}^{M-N}B_kz^{-k} + \sum_{k=1}^{N}\frac{A_k}{1-d_kz^{-1}} \]</div>
+<ul class="simple">
+<li><p>Os coeficientes <span class="math notranslate nohighlight">\(B_k\)</span> são calculados por divisão continuada.</p></li>
+<li><p>E os coeficientes <span class="math notranslate nohighlight">\(A_k\)</span> como anteriormente.</p></li>
+</ul>
+<p><strong>Terceiro caso:</strong> <span class="math notranslate nohighlight">\(M \geq N\)</span> e um pólo de ordem <span class="math notranslate nohighlight">\(L\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[ X(z) = \sum_{k=0}^{M-N}B_kz^{-k} + \sum_{k=1}^{N}\frac{A_k}{1-d_kz^{-1}} + \sum_{l=1}^{L}\frac{C_l}{(1-d_iz^{-1})^l} \]</div>
+<ul class="simple">
+<li><p>Os coeficientes <span class="math notranslate nohighlight">\(A_k\)</span> e <span class="math notranslate nohighlight">\(B_k\)</span> são calculados como anteriormente e os <span class="math notranslate nohighlight">\(C_l\)</span> são obtidos por:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ C_l = \frac{1}{(L-l)!(-d_i)^{L-l}} \left[ \frac{d^{L-l}}{dz^{L-l}}(1-d_iz)^L X(z^{-1}) \right]_{z=d_{i}^{-1}} \]</div>
+<p><strong>OBSERVAÇÕES:</strong></p>
+<div class="math notranslate nohighlight">
+\[ \Longrightarrow \; B_kz^{-k} \rightarrow B_k\delta(n-k) \]</div>
+<div class="math notranslate nohighlight">
+\[ \Longrightarrow \; \frac{A_k}{1-d_kz^{-1}} \rightarrow A_k(d_k)^nu(n) \text{ ou } -A_k(d_k)^nu(-n-1) \]</div>
+<div class="math notranslate nohighlight">
+\[ \Longrightarrow \; \frac{d_kz^{-1}}{(1-d_kz^{-1})^2} \rightarrow n(d_k)^nu(n) \text{ ou } -n(d_k)^nu(-n-1) \]</div>
+<p><strong>Exemplo 5: Calcular a transformada z inversa de:</strong></p>
+<div class="math notranslate nohighlight">
+\[ X(z) = \frac{1+2z^{-1}+z^{-2}}{1-\frac{3}{2}z^{-1}+\frac{1}{2}z^{-2}}\]</div>
+<ul class="simple">
+<li><p>Como <span class="math notranslate nohighlight">\(M = N = 2\)</span> deve-se dividir um polinômio pelo outro:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(z) = \frac{1+2z^{-1}+z^{-2}}{1-\frac{3}{2}z^{-1}+\frac{1}{2}z^{-2}} = 2 + \frac{-1+5z^{-1}}{1-\frac{3}{2}z^{-1}+\frac{1}{2}z^{-2}}\]</div>
+<div class="math notranslate nohighlight">
+\[= 2 + \frac{-1+5z^{-1}}{(1-0.5z^{-1})(1-z^{-1})} = 2 + \frac{A_1}{(1-\frac{1}{2}z^{-1})} + \frac{A_2}{(1-z^{-1})} \]</div>
+<ul class="simple">
+<li><p>Em seguida calcula-se os coeficientes <span class="math notranslate nohighlight">\(A_1\)</span> e <span class="math notranslate nohighlight">\(A_2\)</span> com o uso do Teor. dos Resíduos</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ A_1 = (1-\frac{1}{2}z^{-1})X(z)|_{z=1/2} = \frac{1+4+2^2}{(1-2)} = -9 \]</div>
+<div class="math notranslate nohighlight">
+\[ A_2 = (1-z^{-1})X(z)|_{z=1} = \frac{1+2+1}{\frac{1}{2}} = 8 \]</div>
+<ul class="simple">
+<li><p>Portanto <span class="math notranslate nohighlight">\(X(z)\)</span> em frações parciais é dada por:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(z) = 2 - \frac{9}{(1-\frac{1}{2}z^{-1})} + \frac{8}{(1-z^{-1})} \]</div>
+<ul class="simple">
+<li><p>Utilizando o método de inversão por inspeção e analisando a região de convergência determina-se <span class="math notranslate nohighlight">\(x[n]\)</span>.</p></li>
+</ul>
+<p><img alt="aula_6_slide_12" src="_images/fig_6_9.png" /></p>
+<ul class="simple">
+<li><p>ROC: <span class="math notranslate nohighlight">\(|z| &gt; 1\)</span> <span class="math notranslate nohighlight">\(\Rightarrow\)</span> Sequência Lateral Direita: <span class="math notranslate nohighlight">\( x[n] = 2\delta[n] - 9\left( \frac{1}{2} \right)^n u[n] + 8u[n] \)</span></p></li>
+<li><p>ROC: <span class="math notranslate nohighlight">\(|z| &lt; 1/2\)</span> <span class="math notranslate nohighlight">\(\Rightarrow\)</span> Sequência Lateral Esquerda: <span class="math notranslate nohighlight">\( x[n] = 2\delta[n] + 9\left( \frac{1}{2} \right)^n u[-n-1] - 8u[-n-1] \)</span></p></li>
+<li><p>ROC: <span class="math notranslate nohighlight">\(1/2 &lt; |z| &lt; 1\)</span> Sequência bilateral: <span class="math notranslate nohighlight">\( x[n] = 2\delta[n] - 9\left( \frac{1}{2} \right)^n u[n] - 8u[-n-1] \)</span></p></li>
+</ul>
+<p><font size="6">Exemplo 6: Calcular <span class="math notranslate nohighlight">\(x[n]\)</span> dado que:</font></p>
+<div class="math notranslate nohighlight">
+\[ X(z) = \frac{1+z^{-1}}{1-z^{-1}+0.5z^{-2}} \]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(X(z)\)</span> em função dos pólos e zeros:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(z) = \frac{1+z^{-1}}{(1-p_1z^{-1})(1-p_2z^{-1})} \]</div>
+<div class="math notranslate nohighlight">
+\[ \text{em que: } p_{1,2} = \frac{1}{2}\pm j\frac{1}{2}=\frac{1}{\sqrt{2}}e^{\pm j\frac{\pi}{4}} \]</div>
+<ul class="simple">
+<li><p>Cálculo de <span class="math notranslate nohighlight">\(A_1\)</span> e <span class="math notranslate nohighlight">\(A_2\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ A_1 = \left. \frac{1+z^{-1}}{1-p_2z^{-1}}\right|_{z=\frac{1}{2}+j\frac{1}{2}} = \frac{1}{2}-j\frac{3}{2} = \frac{\sqrt{10}}{2}e^{-j1.249} \]</div>
+<div class="math notranslate nohighlight">
+\[ A_2 = \left. \frac{1+z^{-1}}{1-p_1z^{-1}}\right|_{z=\frac{1}{2}-j\frac{1}{2}} = \frac{1}{2}+j\frac{3}{2} = \frac{\sqrt{10}}{2}e^{j1.249} \]</div>
+<ul class="simple">
+<li><p>Cálculo de <span class="math notranslate nohighlight">\(x[n]\)</span>:
+$<span class="math notranslate nohighlight">\( x[n] = \frac{\sqrt{10}}{2}e^{-j1.249} \left( \frac{1}{\sqrt{2}}e^{j\pi/4} \right)^n + \frac{\sqrt{10}}{2}e^{j1.249} \left( \frac{1}{\sqrt{2}}e^{-j\pi/4} \right)^n, n \ge 0 \)</span>$</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ x[n] = \frac{\sqrt{10}}{2}\left(\frac{1}{\sqrt{2}}\right)^n \left\{ e^{j\left(\frac{\pi}{4}n-1.249\right)} + e^{-j\left(\frac{\pi}{4}n-1.249\right)} \right\} u[n] \]</div>
+<div class="math notranslate nohighlight">
+\[ \Longrightarrow \; x[n] = \sqrt{10}\left(\frac{1}{\sqrt{2}}\right)^n \cos\left(\frac{\pi}{4}n-1.249\right)u[n] \]</div>
+<p><font size="6"><strong>Método de Expansão em Série de Potências</strong></font></p>
+<ul class="simple">
+<li><p>Neste caso o cálculo da Transformada z inversa se resume em encontrar uma série do tipo:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(z) = \cdots x[-2]z^{2} + x[-1]z + x[0] + x[1]z^{-1} + x[2]z^{-2} + \cdots \]</div>
+<p><font size="4"><strong>Exemplo 7: Determinar a transformada z inversa de</strong> </font></p>
+<div class="math notranslate nohighlight">
+\[ X(z) = \ln(1+az^{-1}), \; |z|&gt;|a| \]</div>
+<ul class="simple">
+<li><p>A série da função <span class="math notranslate nohighlight">\(\ln(1+x)\)</span> é dada por: <span class="math notranslate nohighlight">\( \ln(1+x) = \sum_{n=1}^{\infty}(-1)^{n+1}\frac{(x)^n}{n} : -1&lt;x&lt;1 \)</span></p></li>
+<li><p>Assim, admitindo <span class="math notranslate nohighlight">\(|z| &gt; |a|\)</span> tem-se que:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(z) = \sum_{n=1}^{\infty}(-1)^{n+1}\frac{(az^{-1})^{n}}{n} = \sum_{n=1}^{\infty}(-1)^{n+1}\frac{(az^{-1})^n}{n} \; \Rightarrow \; X(z) = \sum_{n=1}^{\infty}(-1)^{n+1}\frac{(a)^n}{n}z^{-n} \]</div>
+<div class="math notranslate nohighlight">
+\[ x[n] = (-1)^{n+1} \frac{(a)^n}{n} : n=1,2,\dots \]</div>
+<p><font size="6"><strong>Método de Divisão Continuada (longa)</strong></font></p>
+<ul class="simple">
+<li><p>Faz-se a divisão dos polinômios em <span class="math notranslate nohighlight">\(z^{-1}\)</span> ou em <span class="math notranslate nohighlight">\(z\)</span>, dependendo da sequência ser lateral esquerda ou direita.</p></li>
+</ul>
+<p><font size="4">Exemplo 8: Determinar a transformada z inversa de</font></p>
+<div class="math notranslate nohighlight">
+\[ X(z) = \frac{1}{1-az^{-1}}, |z|&gt;|a| \]</div>
+<ul class="simple">
+<li><p>Como <span class="math notranslate nohighlight">\(|z|&gt;|a|\)</span> <span class="math notranslate nohighlight">\(\Rightarrow\)</span> Sequência lateral direita (divisão com os polinômios em <span class="math notranslate nohighlight">\(z^{-1}\)</span>):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\frac{1}{1-az^{-1}} = 1 - \frac{az^{-1}}{1-az^{-1}} = 1 + az^{-1}+\frac{a^2z^{-2}}{1-az^{-1}} = 1 + az^{-1}+a^2z^{-2}+\frac{a^3z^{-3}}{1-az^{-1}} = \ldots\]</div>
+<ul class="simple">
+<li><p>observando a lei de recorrência, tem-se: <span class="math notranslate nohighlight">\(x[n] = a^n u[n]\)</span></p></li>
+<li><p>Como ficaria a resposta para uma sequência lateral esquerda?</p></li>
+</ul>
+<p><font size="6"><strong>Método da Integral de Contorno</strong></font></p>
+<ul class="simple">
+<li><p>O teorema da Integral de Cauchy estabelece que:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split} \frac{1}{2\pi j} \oint_{C}z^{-k}dz = \begin{cases} 1, &amp;k=1 \\ 0, &amp;k\neq1 \end{cases} \end{split}\]</div>
+<ul class="simple">
+<li><p>Em que: <span class="math notranslate nohighlight">\(C\)</span> é uma região de contorno que engloba a origem.</p></li>
+<li><p>A transformada z de uma sequência <span class="math notranslate nohighlight">\(x(n)\)</span> é dada por:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(z) = \sum_{n=-\infty}^{\infty}x(n)z^{-n} \]</div>
+<p><span class="math notranslate nohighlight">\( \frac{1}{2\pi j}z^{k-1} \text{ e integrando tem-se que:}\)</span></p>
+<div class="math notranslate nohighlight">
+\[ \frac{1}{2\pi j} \oint_{C}X(z)z^{k-1}dz = \frac{1}{2\pi j} \oint_{C}\sum_{n=\infty}^{-\infty}x(n)z^{-n+k-1}dz \to x[n] = \frac{1}{2\pi j} \oint_{C}X(z)z^{n-1}dz \tag{12}\]</div>
+<p><font size="6"><strong>Solução da integral anterior:</strong></font></p>
+<div class="math notranslate nohighlight">
+\[ x(n) = \sum \text{residuos de } X(z)z^{n-1} \text{ nos pólos em } C \]</div>
+<ul class="simple">
+<li><p>Se <span class="math notranslate nohighlight">\(X(z)\)</span> é uma função racional então:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ X(z)z^{n-1} = \frac{\Psi(z)}{(z-d_0)^s} \]</div>
+<ul class="simple">
+<li><p>Em que: <span class="math notranslate nohighlight">\(d_0\)</span> é um pólo de multiplicidade <span class="math notranslate nohighlight">\(s\)</span>. Neste caso:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ RES\left\{ X(z)z^{n-1} \right\}_{z=d_0} = \frac{1}{(s-1)!}\frac{d^{s-1}}{dz^{s-1}}\Psi(z)|_{z=d_0} \]</div>
+<ul class="simple">
+<li><p>Se o pólo tem multiplicidade <span class="math notranslate nohighlight">\(s = 1\)</span>, então:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ RES\left\{ X(z)z^{n-1} \right\}_{z=d_0} = \Psi(d_0) \]</div>
+<ul class="simple">
+<li><p>OBS: Se a RC inclui o círculo unitário:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ x(n) = \frac{1}{2\pi}\int_{-\pi}^{\pi}X(e^{jw})e^{jwn}dw  \]</div>
+<p><font size="4">Exemplo 9:</font></p>
+<div class="math notranslate nohighlight">
+\[ X(z) = \frac{1}{1-az^{-1}}, |z|&gt;|a| \]</div>
+<div class="math notranslate nohighlight">
+\[ x(n) = \frac{1}{2\pi j} \oint_C \frac{z^{n-1}}{1-az^{-1}}dz = \frac{1}{2\pi j} \oint_C \frac{z^{n}}{z-a}dz \]</div>
+<div class="math notranslate nohighlight">
+\[ \text{Para $z=a$ e } n\geq0 \; \Rightarrow \; \Psi(z) = z^n|_{z=a} = a^n \]</div>
+<ul class="simple">
+<li><p>portanto:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ x(n) = a^nu(n) \]</div>
+<p><font size="6"><strong>6. Análise de Sistemas Lineares</strong></font></p>
+<ul class="simple">
+<li><p>Um sistema linear discreto no tempo é completamente descrito pela transformada z da resposta à amostra unitária <span class="math notranslate nohighlight">\(h(n)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(x[n]\)</span>: Entrada   ||   <span class="math notranslate nohighlight">\(y[n]\)</span>: Saída   ||   <span class="math notranslate nohighlight">\(h[n]\)</span>: Resposta ao Impulso</p></li>
+<li><p><span class="math notranslate nohighlight">\(H(z)\)</span>: Função do Sistema (ou função de transferência)</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[y[n] = h[n]\ast x[n] \Leftrightarrow Y(z) = H(z)X(z) \]</div>
+<p><font size="5">Equação de Diferenças</font></p>
+<ul class="simple">
+<li><p>A forma mais comum de se descrever um sistema linear é através da equação linear de diferenças tal que:</p></li>
+<li><p>Em que: <span class="math notranslate nohighlight">\(a_k\)</span> e <span class="math notranslate nohighlight">\(b_k\)</span> são constantes e em geral <span class="math notranslate nohighlight">\(a_0 = 1\)</span></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\sum_{k=0}^{N}a_ky[n-k] = \sum_{k=0}^{M}b_kx[n-k] \]</div>
+<p><font size="4">Transformada z: (Equação de um Sistema Linear Discreto)</font></p>
+<div class="math notranslate nohighlight">
+\[ \sum_{k=0}^{N}a_kY(z)z^{-k} = \sum_{k=0}^{M}b_kX(z)z^{-k} \; \Rightarrow \; H(z) = \frac{Y(z)}{X(z)} = \frac{\sum_{k=0}^{M}b_k z^{-k}}{\sum_{k=0}^{N}a_k z^{-k}} \]</div>
+<ul class="simple">
+<li><p>Na forma fatorada (através dos pólos e zeros)</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ H(z) = \frac{b_0}{a_0}\frac{\prod_{k=1}^{M}(1-c_kz^{-1})}{\prod_{k=1}^{N}(1-d_kz^{-1})} \]</div>
+<ul class="simple">
+<li><p>A estabilidade e a causalidade dependerão da escolha da região de  convergência.</p></li>
+<li><p>Observe também que a informação completa a respeito do sistema está contida no conhecimento dos pólos e zeros.</p></li>
+</ul>
+<p><font size="6"><strong>6.1  Estabilidade e Causalidade</strong></font></p>
+<ul class="simple">
+<li><p>Estabilidade:</p></li>
+<li><p>A condição necessária e suficiente para que um sistema seja estável é que <span class="math notranslate nohighlight">\(h(n)\)</span> seja absolutamente somável, isto é:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\sum_{n=-\infty}^{\infty}|h(n)|&lt;\infty \]</div>
+<ul class="simple">
+<li><p>Logo: A RDC de <span class="math notranslate nohighlight">\(H(z)\)</span> deve incluir o círculo unitário. Pois:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[|H(z)| \leq \sum_{n=-\infty}^{\infty}|h(n)z^{-n}| = \sum_{n=-\infty}^{\infty}|h(n)||z^{-n}| \]</div>
+<ul class="simple">
+<li><p>No círculo unitário <span class="math notranslate nohighlight">\(|z| = 1\)</span>. Portanto:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ |H(z)| \leq \sum_{n=-\infty}^{\infty}|h(n)| \]</div>
+<ul class="simple">
+<li><p>Causalidade:</p>
+<ul>
+<li><p>Um Sistema Linear Discreto e invariante no tempo é chamado causal se a sua Resposta à Amostra Unitária satisfaz a seguinte condição:</p></li>
+</ul>
+</li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ h(n)=0, n&lt;0 \]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(h(n)\)</span> é uma seqüência lateral direita.</p>
+<ul>
+<li><p>Portanto a RDC é o exterior de um círculo de raio <span class="math notranslate nohighlight">\(R\)</span>.</p></li>
+<li><p>Se o sistema é estável e causal, então <span class="math notranslate nohighlight">\(R &lt; 1\)</span>.</p></li>
+</ul>
+</li>
+</ul>
+<p>Em Resumo</p>
+<ul class="simple">
+<li><p>Sistema Estável: A RDC é um anel que inclui o círculo unitário e não contém pólos.</p></li>
+<li><p>Sistema Causal: A RDC é o exterior de um círculo cujo raio contém o maior pólo (sem incluí-lo).</p></li>
+<li><p>Sistema Estável e Causal: Todos os pólos estão dentro do círculo unitário e a RDC inclui este círculo.</p></li>
+</ul>
+<p><font size="4"><strong>Exemplo 11:</strong></font></p>
+<div class="math notranslate nohighlight">
+\[ y(n) = ay(n-1) + x(n) \]</div>
+<ul class="simple">
+<li><p>Função do Sistema:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ H(z) = \frac{1}{1-az^{-1}} \]</div>
+<ul class="simple">
+<li><p>Condição de Causalidade: <span class="math notranslate nohighlight">\(|z| &gt; |a|\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ h(n)=a^nu(n) \]</div>
+<ul class="simple">
+<li><p>Condição de Estabilidade: <span class="math notranslate nohighlight">\(|a| &lt; 1\)</span>:</p></li>
+</ul>
+<p><font size="6"><strong>7. Observações</strong></font></p>
+<div class="math notranslate nohighlight">
+\[ H(z) = \frac{Y(z)}{X(z)} = \frac{\sum_{k=0}^{M}b_kz^{-k}}{\sum_{k=0}^{N}{a_kz^{-k}}} \]</div>
+<ul class="simple">
+<li><p>Se <span class="math notranslate nohighlight">\(N = 0\)</span>: O sistema não tem pólos a não ser em <span class="math notranslate nohighlight">\(z = 0\)</span>. Assim, <span class="math notranslate nohighlight">\(h(n)\)</span> tem duração finita, isto é,  o sistema apresenta resposta ao impulso finita (sistema FIR).</p></li>
+<li><p>Se <span class="math notranslate nohighlight">\(N &gt; 0\)</span>: O sistema tem pólos e cada um deles contribui com uma sequência exponencial em <span class="math notranslate nohighlight">\(h(n)\)</span>. Assim, <span class="math notranslate nohighlight">\(h(n)\)</span> tem duração infinita, isto é, a resposta ao impulso é infinita (sistema IIR).</p></li>
+<li><p>Uma vantagem da representação do sistema através dos pólos e zeros é que ela conduz a uma usual representação geométrica para se obter um esboço do comportamento do sistema em termos de sua resposta de amplitude.</p></li>
+</ul>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Aula%2005%20-%20Amostragem.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Aula 5 - Amostragem</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Aula%2007%20-%20Transformada%20Discreta%20de%20Fourier.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Aula 6 - Transformada Z</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Carlos Dias Maciel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
